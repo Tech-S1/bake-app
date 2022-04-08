@@ -29,7 +29,6 @@ const columns = [
     title: "Total Score",
     editable: "never",
     type: "numeric",
-    render: (rowData) => rowData.appearance + rowData.taste,
   },
 ];
 
@@ -83,7 +82,15 @@ const ScoresPage = () => {
         alignItems="center"
         justifyContent="center"
       ></Box>
-      <Table title="Scores" columns={columns} data={data} editable={edit} />
+      <Table
+        title="Scores"
+        columns={columns}
+        data={data.map((item) => ({
+          ...item,
+          total: item.appearance + item.taste,
+        }))}
+        editable={edit}
+      />
     </DefaultLayout>
   );
 };
