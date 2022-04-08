@@ -5,6 +5,7 @@ import { Box } from "@mui/system";
 import scores from "../data/scores";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
+import Typography from "@mui/material/Typography";
 
 const bakerIdCol = { title: "Baker Id", field: "bakerId", type: "numeric" };
 const bakerNameCol = { title: "Baker Name", field: "name" };
@@ -29,15 +30,29 @@ const columns = [
 
 const HomePage = () => {
   const [data, setData] = useState([]);
+  const [title, setTitle] = useState("");
   const [showName, setShowName] = useState(false);
 
   useEffect(() => {
     //TODO: Get latest scores (API Call)
     setData(scores);
+    //TODO: Get latest title (API Call)
+    setTitle("Test Bake Off");
   }, []);
 
   return (
     <DefaultLayout>
+      <Box
+        display="flex"
+        width="100%"
+        height={100}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Typography variant="h3" gutterBottom component="div">
+          {title}
+        </Typography>
+      </Box>
       <Box
         display="flex"
         width="100%"
