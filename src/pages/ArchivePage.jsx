@@ -7,6 +7,8 @@ import Select from "@mui/material/Select";
 import archive from "../data/archive";
 import Table from "../components/Table";
 import CenterBox from "../components/CenterBox";
+import getAllBakeOffs from "../apis/getAllBakeOffs";
+import mapParticipantToTable from "../utils/mapParticipantToTable";
 
 const archiveColumns = [
   { title: "Baker Id", field: "bakerId", type: "numeric" },
@@ -33,8 +35,14 @@ const ArchivePage = () => {
   const [archiveData, setArchiveData] = useState([]);
 
   useEffect(() => {
-    //TODO: Get archive data (API Call)
-    setArchiveData(archive);
+    getAllBakeOffs(
+      (successData) => {
+        setArchiveData(successData.bakeoffs);
+      },
+      (errorData) => {
+        console.log(errorData); //TODO: Handle Error
+      }
+    );
   }, []);
 
   return (
@@ -63,10 +71,7 @@ const ArchivePage = () => {
           columns={archiveColumns}
           data={archiveData
             .filter((archiveDataItem) => archiveDataItem.date === date)[0]
-            .scores.map((score) => ({
-              ...score,
-              total: score.appearance + score.taste,
-            }))}
+            .participants.map(mapParticipantToTable)}
         />
       )}
     </DefaultLayout>

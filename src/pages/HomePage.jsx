@@ -8,6 +8,7 @@ import { qrEnabled } from "../constants";
 import CenterBox from "../components/CenterBox";
 import Donate from "../components/Donate";
 import ToggleSwitch from "../components/ToggleSwitch";
+import mapParticipantToTable from "../utils/mapParticipantToTable";
 
 const bakerIdCol = { title: "Baker Id", field: "bakerId" };
 const bakerNameCol = { title: "Baker Name", field: "name" };
@@ -31,33 +32,14 @@ const scoreColumns = [
 ];
 
 const HomePage = () => {
-  const [title, setTitle] = useState("");
   const [showName, setShowName] = useState(false);
-  const [homeData, setHomeData] = useState([]);
+  const [latestBakeData, setLatestBakeData] = useState();
 
   useEffect(() => {
     getLatestBakeOff(
       (successData) => {
-        setTitle(successData.bakeoffs[0].title);
-        setHomeData(
-          successData.bakeoffs[0].participants.map((participant) => ({
-            bakerId: participant.entrantId,
-            name: participant.name,
-            appearance: participant.results
-              .map((result) => result.appearance)
-              .reduce((prev, next) => prev + next),
-            taste: participant.results
-              .map((result) => result.taste)
-              .reduce((prev, next) => prev + next),
-            total:
-              participant.results
-                .map((result) => result.appearance)
-                .reduce((prev, next) => prev + next) +
-              participant.results
-                .map((result) => result.taste)
-                .reduce((prev, next) => prev + next),
-          }))
-        );
+        console.log();
+        setLatestBakeData(successData.bakeoffs[0]);
       },
       (errorData) => {
         console.log(errorData); //TODO: Handle Error
@@ -67,31 +49,35 @@ const HomePage = () => {
 
   return (
     <DefaultLayout>
-      <Stack direction="row" spacing={2}>
-        <CenterBox>
-          {qrEnabled === "true" && <Donate url="www.google.com" />}
-        </CenterBox>
-        <CenterBox>
-          <Typography variant="h3" gutterBottom component="div">
-            {title}
-          </Typography>
-        </CenterBox>
-        <CenterBox>
-          {qrEnabled === "true" && <Donate url="www.google.com" />}
-        </CenterBox>
-      </Stack>
-      <Table
-        title="Scores"
-        columns={[showName ? bakerNameCol : bakerIdCol, ...scoreColumns]}
-        data={homeData}
-      />
-      <CenterBox height={50}>
-        <ToggleSwitch
-          text="Show Names"
-          enabled={showName}
-          setEnabled={setShowName}
-        />
-      </CenterBox>
+      {latestBakeData && (
+        <>
+          <Stack direction="row" spacing={2}>
+            <CenterBox>
+              {qrEnabled === "true" && <Donate url="www.google.com" />}
+            </CenterBox>
+            <CenterBox>
+              <Typography variant="h3" gutterBottom component="div">
+                {latestBakeData.title}
+              </Typography>
+            </CenterBox>
+            <CenterBox>
+              {qrEnabled === "true" && <Donate url="www.google.com" />}
+            </CenterBox>
+          </Stack>
+          <Table
+            title="Scores"
+            columns={[showName ? bakerNameCol : bakerIdCol, ...scoreColumns]}
+            data={latestBakeData.participants.map(mapParticipantToTable)}
+          />
+          <CenterBox height={50}>
+            <ToggleSwitch
+              text="Show Names"
+              enabled={showName}
+              setEnabled={setShowName}
+            />
+          </CenterBox>
+        </>
+      )}
     </DefaultLayout>
   );
 };
