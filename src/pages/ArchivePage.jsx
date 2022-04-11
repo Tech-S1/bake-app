@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import DefaultLayout from "../containers/DefaultLayout";
-import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import archive from "../data/archive";
 import Table from "../components/Table";
+import CenterBox from "../components/CenterBox";
 
-const columns = [
+const archiveColumns = [
   { title: "Baker Id", field: "bakerId", type: "numeric" },
   { title: "Baker Name", field: "name" },
   {
@@ -30,54 +30,42 @@ const columns = [
 
 const ArchivePage = () => {
   const [date, setDate] = useState();
-  const [data, setData] = useState([]);
+  const [archiveData, setArchiveData] = useState([]);
 
   useEffect(() => {
     //TODO: Get archive data (API Call)
-    setData(archive);
+    setArchiveData(archive);
   }, []);
 
   return (
     <DefaultLayout>
-      <Box
-        display="flex"
-        width="100%"
-        height={100}
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Box
-          display="flex"
-          width="50%"
-          height={100}
-          alignItems="center"
-          justifyContent="center"
-        >
+      <CenterBox height={100}>
+        <CenterBox width="50%" height={100}>
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Competition</InputLabel>
+            <InputLabel>Competition</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
               value={date}
               label="Competition"
               onChange={({ target }) => setDate(target.value)}
             >
-              {data.map((e) => (
-                <MenuItem value={e.date}>{`${e.date} - ${e.title}`}</MenuItem>
+              {archiveData.map((archiveDataItem) => (
+                <MenuItem
+                  value={archiveDataItem.date}
+                >{`${archiveDataItem.date} - ${archiveDataItem.title}`}</MenuItem>
               ))}
             </Select>
           </FormControl>
-        </Box>
-      </Box>
+        </CenterBox>
+      </CenterBox>
       {date && (
         <Table
           title="Scores"
-          columns={columns}
-          data={data
-            .filter((e) => e.date === date)[0]
-            .scores.map((item) => ({
-              ...item,
-              total: item.appearance + item.taste,
+          columns={archiveColumns}
+          data={archiveData
+            .filter((archiveDataItem) => archiveDataItem.date === date)[0]
+            .scores.map((score) => ({
+              ...score,
+              total: score.appearance + score.taste,
             }))}
         />
       )}

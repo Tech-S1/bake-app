@@ -13,12 +13,14 @@
     "@testing-library/user-event": "^13.5.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
+    "react-qr-code": "^2.0.5",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "GENERATE_SOURCEMAP=false react-scripts start",
+    "start-local": "REACT_APP_QR=true REACT_APP_BASE_URL=http://localhost:8090 react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

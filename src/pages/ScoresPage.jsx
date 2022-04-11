@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from "react";
 import Table from "../components/Table";
 import DefaultLayout from "../containers/DefaultLayout";
-import { Box } from "@mui/system";
 import scores from "../data/scores";
+import bakers from "../data/bakers";
+import judges from "../data/judges";
+import CenterBox from "../components/CenterBox";
 
-const columns = [
-  { title: "Baker Id", field: "bakerId", type: "numeric" },
+const scoreColumns = [
+  {
+    title: "Baker Id",
+    field: "bakerId",
+    type: "numeric",
+  },
+  {
+    title: "Judge Name",
+    field: "judgeName",
+  },
   {
     title: "Appearance Score ",
     field: "appearance",
@@ -32,19 +42,36 @@ const columns = [
   },
 ];
 
+const judgeIdToName = ({ newData, judgesData }) => ({
+  ...newData,
+  judgeId: judgesData.filter(
+    (judge) => judge.judgeName === newData.judgeName
+  )[0].judgeId,
+  judgeName: null,
+});
+
 const ScoresPage = () => {
-  const [data, setData] = useState([]);
+  const [scoresData, setScoresData] = useState([]);
+  const [bakersData, setBakersData] = useState([]);
+  const [judgesData, setJudgesData] = useState([]);
 
   useEffect(() => {
     //TODO: Get latest scores (API Call)
-    setData(scores);
+    setScoresData(scores);
+    //TODO: Get latest bakers (API Call)
+    setBakersData(bakers);
+    //TODO: Get latest judges (API Call)
+    setJudgesData(judges);
   }, []);
 
-  const edit = {
+  const editScoresData = {
     onRowAdd: (newData) =>
       new Promise((resolve, reject) => {
         setTimeout(() => {
-          setData([...data, newData]);
+          setScoresData([
+            ...scoresData,
+            judgeIdToName({ newData, judgesData }),
+          ]);
           //TODO: Add Score (API Call)
           resolve();
         }, 1000);
@@ -52,10 +79,10 @@ const ScoresPage = () => {
     onRowUpdate: (newData, oldData) =>
       new Promise((resolve, reject) => {
         setTimeout(() => {
-          const dataUpdate = [...data];
+          const dataUpdate = [...scoresData];
           const index = oldData.tableData.id;
-          dataUpdate[index] = newData;
-          setData([...dataUpdate]);
+          dataUpdate[index] = judgeIdToName({ newData, judgesData });
+          setScoresData([...dataUpdate]);
           //TODO: Update Score (API Call)
           resolve();
         }, 1000);
@@ -63,10 +90,10 @@ const ScoresPage = () => {
     onRowDelete: (oldData) =>
       new Promise((resolve, reject) => {
         setTimeout(() => {
-          const dataDelete = [...data];
+          const dataDelete = [...scoresData];
           const index = oldData.tableData.id;
           dataDelete.splice(index, 1);
-          setData([...dataDelete]);
+          setScoresData([...dataDelete]);
           //TODO: Delete Score (API Call)
           resolve();
         }, 1000);
@@ -75,21 +102,42 @@ const ScoresPage = () => {
 
   return (
     <DefaultLayout>
-      <Box
-        display="flex"
-        width="100%"
-        height={50}
-        alignItems="center"
-        justifyContent="center"
-      ></Box>
+      <CenterBox />
       <Table
         title="Scores"
-        columns={columns}
-        data={data.map((item) => ({
-          ...item,
-          total: item.appearance + item.taste,
-        }))}
-        editable={edit}
+        columns={scoreColumns.map((column) => {
+          if (column.field === "bakerId") {
+            const obj = {};
+            bakersData
+              .map((data) => data.bakerId)
+              .forEach((element) => {
+                obj[element] = element;
+              });
+            return { ...column, lookup: obj };
+          }
+          if (column.field === "judgeName") {
+            const obj = {};
+            judgesData
+              .map((data) => data.judgeName)
+              .forEach((element) => {
+                obj[element] = element;
+              });
+            return { ...column, lookup: obj };
+          }
+          return column;
+        })}
+        data={scoresData
+          .map((item) => ({
+            ...item,
+            total: item.appearance + item.taste,
+          }))
+          .map((item) => ({
+            ...item,
+            judgeName: judgesData.filter(
+              (judge) => judge.judgeId === item.judgeId
+            )[0].judgeName,
+          }))}
+        editable={editScoresData}
       />
     </DefaultLayout>
   );

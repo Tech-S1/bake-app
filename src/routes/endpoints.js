@@ -1,8 +1,8 @@
-import BakersPage from "../pages/BakersPage";
 import ArchivePage from "../pages/ArchivePage";
 import HomePage from "../pages/HomePage";
 import ScoresPage from "../pages/ScoresPage";
 import RunningTotalPage from "../pages/RunningTotalPage";
+import ConfigurePage from "../pages/ConfigurePage";
 
 const endpoints = [
   {
@@ -19,9 +19,9 @@ const endpoints = [
   },
   {
     navbar: true,
-    name: "Bakers",
-    path: "/bakers",
-    element: <BakersPage />,
+    name: "Configure",
+    path: "/configure",
+    element: <ConfigurePage />,
   },
   {
     navbar: true,

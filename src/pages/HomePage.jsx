@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Table from "../components/Table";
 import DefaultLayout from "../containers/DefaultLayout";
-import { Box } from "@mui/system";
-import scores from "../data/scores";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
+import { Stack } from "@mui/material";
+import getLatestBakeOff from "../apis/getLatestBakeOff";
+import { qrEnabled } from "../constants";
+import CenterBox from "../components/CenterBox";
+import Donate from "../components/Donate";
+import ToggleSwitch from "../components/ToggleSwitch";
 
-const bakerIdCol = { title: "Baker Id", field: "bakerId", type: "numeric" };
+const bakerIdCol = { title: "Baker Id", field: "bakerId" };
 const bakerNameCol = { title: "Baker Name", field: "name" };
 
-const columns = [
+const scoreColumns = [
   {
     title: "Appearance Score ",
     field: "appearance",
@@ -29,55 +31,67 @@ const columns = [
 ];
 
 const HomePage = () => {
-  const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
   const [showName, setShowName] = useState(false);
+  const [homeData, setHomeData] = useState([]);
 
   useEffect(() => {
-    //TODO: Get latest scores (API Call)
-    setData(scores);
-    //TODO: Get latest title (API Call)
-    setTitle("Test Bake Off");
+    getLatestBakeOff(
+      (successData) => {
+        setTitle(successData.bakeoffs[0].title);
+        setHomeData(
+          successData.bakeoffs[0].participants.map((participant) => ({
+            bakerId: participant.entrantId,
+            name: participant.name,
+            appearance: participant.results
+              .map((result) => result.appearance)
+              .reduce((prev, next) => prev + next),
+            taste: participant.results
+              .map((result) => result.taste)
+              .reduce((prev, next) => prev + next),
+            total:
+              participant.results
+                .map((result) => result.appearance)
+                .reduce((prev, next) => prev + next) +
+              participant.results
+                .map((result) => result.taste)
+                .reduce((prev, next) => prev + next),
+          }))
+        );
+      },
+      (errorData) => {
+        console.log(errorData); //TODO: Handle Error
+      }
+    );
   }, []);
 
   return (
     <DefaultLayout>
-      <Box
-        display="flex"
-        width="100%"
-        height={100}
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Typography variant="h3" gutterBottom component="div">
-          {title}
-        </Typography>
-      </Box>
-      <Box
-        display="flex"
-        width="100%"
-        height={50}
-        alignItems="center"
-        justifyContent="center"
-      >
-        <FormControlLabel
-          control={
-            <Switch
-              checked={showName}
-              onChange={({ target }) => setShowName(target.checked)}
-            />
-          }
-          label="Show Names"
-        />
-      </Box>
+      <Stack direction="row" spacing={2}>
+        <CenterBox>
+          {qrEnabled === "true" && <Donate url="www.google.com" />}
+        </CenterBox>
+        <CenterBox>
+          <Typography variant="h3" gutterBottom component="div">
+            {title}
+          </Typography>
+        </CenterBox>
+        <CenterBox>
+          {qrEnabled === "true" && <Donate url="www.google.com" />}
+        </CenterBox>
+      </Stack>
       <Table
         title="Scores"
-        columns={[showName ? bakerNameCol : bakerIdCol, ...columns]}
-        data={data.map((item) => ({
-          ...item,
-          total: item.appearance + item.taste,
-        }))}
+        columns={[showName ? bakerNameCol : bakerIdCol, ...scoreColumns]}
+        data={homeData}
       />
+      <CenterBox height={50}>
+        <ToggleSwitch
+          text="Show Names"
+          enabled={showName}
+          setEnabled={setShowName}
+        />
+      </CenterBox>
     </DefaultLayout>
   );
 };
