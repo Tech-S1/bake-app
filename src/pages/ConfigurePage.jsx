@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
+import createBakeOff from "../apis/createBakeOff";
+import getBakers from "../apis/getBakers";
+import getJudges from "../apis/getJudges";
+import getLatestBakeOff from "../apis/getLatestBakeOff";
+import updateBakeOff from "../apis/updateBakeOff";
 import CenterBox from "../components/CenterBox";
 import Table from "../components/Table";
 import TitleInputBox from "../components/TitleInputBox";
 import DefaultLayout from "../containers/DefaultLayout";
 import bakers from "../data/bakers";
 import judges from "../data/judges";
+import currentDate from "../utils/currentDate";
 
 const bakersColumns = [
   { title: "Baker Id", field: "bakerId", type: "numeric" },
@@ -45,27 +51,63 @@ const judgesColumns = [
 const ConfigurePage = () => {
   const [bakeOffTitle, setBakeOffTitle] = useState();
   const [bakeOffTitleSaved, setBakeOffTitleSaved] = useState();
-  const [bakersData, setBakersData] = useState([]);
-  const [judgesData, setJudgesData] = useState([]);
+  const [bakersData, setBakersData] = useState();
+  const [judgesData, setJudgesData] = useState();
 
   useEffect(() => {
-    //TODO: Get latest title (API Call)
-    setBakeOffTitle("test");
-    setBakeOffTitleSaved("test");
-    //TODO: Get latest users (API Call)
-    setBakersData(bakers);
-    //TODO: Get latest judges (API Call)
-    setJudgesData(judges);
-  }, []);
+    getLatestBakeOff(
+      (successData) => {
+        console.log(currentDate());
+        if (successData.bakeoffs[0].date !== currentDate()) {
+          return;
+        }
+        setBakeOffTitle(successData.bakeoffs[0].title);
+        setBakeOffTitleSaved(successData.bakeoffs[0].title);
+      },
+      (errorData) => {
+        console.log(errorData); //TODO: Handle Error
+      }
+    );
+    getJudges(
+      (successData) => {
+        setJudgesData(successData.judges);
+      },
+      (errorData) => {
+        console.log(errorData); //TODO: Handle Error
+      }
+    );
+    getBakers(
+      (successData) => {
+        setBakersData(successData.bakers);
+      },
+      (errorData) => {
+        console.log(errorData); //TODO: Handle Error
+      }
+    );
+  }, [bakeOffTitleSaved]);
 
   const saveTitle = () => {
     if (!bakeOffTitle || bakeOffTitle.trim().length === 0) {
       //TODO: Error no title
       return;
     }
-    //TODO: Set latest title (API Call)
-    console.log(`Save Title: ${bakeOffTitle}`);
-    setBakeOffTitleSaved(bakeOffTitle);
+    if (!bakeOffTitleSaved) {
+      createBakeOff(
+        bakeOffTitle,
+        () => setBakeOffTitleSaved(bakeOffTitle),
+        (errorData) => {
+          console.log(errorData); //TODO: Handle Error
+        }
+      );
+    } else {
+      updateBakeOff(
+        bakeOffTitle,
+        () => setBakeOffTitleSaved(bakeOffTitle),
+        (errorData) => {
+          console.log(errorData); //TODO: Handle Error
+        }
+      );
+    }
   };
 
   const handleSetNewTitle = ({ target }) => setBakeOffTitle(target.value);
@@ -147,19 +189,29 @@ const ConfigurePage = () => {
       </CenterBox>
       {!!bakeOffTitleSaved && (
         <>
-          <Table
-            title="Bakers"
-            columns={bakersColumns}
-            data={bakersData}
-            editable={tableEditBakersData}
-          />
+          {bakersData && (
+            <Table
+              title="Bakers"
+              columns={bakersColumns}
+              data={bakersData.map((baker) => ({
+                bakerId: baker.id,
+                name: baker.name,
+              }))}
+              editable={tableEditBakersData}
+            />
+          )}
           <CenterBox />
-          <Table
-            title="Judges"
-            columns={judgesColumns}
-            data={judgesData}
-            editable={tableEditJudgesData}
-          />
+          {judgesData && (
+            <Table
+              title="Judges"
+              columns={judgesColumns}
+              data={judgesData.map((judge) => ({
+                judgeId: judge.id,
+                judgeName: judge.name,
+              }))}
+              editable={tableEditJudgesData}
+            />
+          )}
         </>
       )}
     </DefaultLayout>

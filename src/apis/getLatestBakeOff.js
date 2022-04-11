@@ -1,7 +1,7 @@
-import { baseurl, endpointLatestBakeOff } from "../constants";
+import { baseurl, latestEndpoint } from "../constants";
 
 const getLatestBakeOff = (callbackSuccess, callbackError) =>
-  fetch(`${baseurl}${endpointLatestBakeOff}`)
+  fetch(`${baseurl}${latestEndpoint}`)
     .then((res) => res.json())
     .then(
       (result) => {
