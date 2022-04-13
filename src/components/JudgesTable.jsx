@@ -49,7 +49,10 @@ const JudgesTable = ({ judgesData, setJudgesData }) => {
                 setJudgesData([
                   ...judgesData,
                   {
-                    id: Math.max(...judgesData.map(({ id }) => id)) + 1, //TODO: Read id from response
+                    id:
+                      judgesData.length === 0
+                        ? 1
+                        : Math.max(...judgesData.map(({ id }) => id)) + 1, //TODO: Read id from response
                     name: newData.judgeName,
                   },
                 ]);

@@ -44,7 +44,10 @@ const BakersTable = ({ bakersData, setBakersData }) => {
                 setBakersData([
                   ...bakersData,
                   {
-                    id: Math.max(...bakersData.map(({ id }) => id)) + 1, //TODO: Read id from response
+                    id:
+                      bakersData.length === 0
+                        ? 1
+                        : Math.max(...bakersData.map(({ id }) => id)) + 1, //TODO: Read id from response
                     name: newData.bakerName,
                   },
                 ]);

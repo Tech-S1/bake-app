@@ -32,7 +32,7 @@ const ConfigurePage = () => {
         console.log(errorData); //TODO: Handle Error
       }
     );
-  }, [bakeOffTitleSaved]);
+  }, []);
 
   const saveTitle = () => {
     if (!bakeOffTitle || bakeOffTitle.trim().length === 0) {
@@ -59,6 +59,7 @@ const ConfigurePage = () => {
         }
       );
     }
+    window.location.reload(false);
   };
 
   const handleSetNewTitle = ({ target }) => setBakeOffTitle(target.value);

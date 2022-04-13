@@ -33,7 +33,10 @@ const ParticipantTable = ({
       new Promise((resolve, reject) =>
         setTimeout(() => {
           const entrantId =
-            Math.max(...participantData.map(({ entrantId }) => entrantId)) + 1;
+            participantData.length === 0
+              ? 1
+              : Math.max(...participantData.map(({ entrantId }) => entrantId)) +
+                1;
           return create(
             TYPE.PARTICIPANT,
             {
