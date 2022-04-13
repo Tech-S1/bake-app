@@ -9,6 +9,7 @@ const TitleInputBox = ({ value, handleChange, handleSave }) => {
   return (
     <Paper
       component="form"
+      onSubmit={(e) => e.preventDefault()}
       sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: "50%" }}
     >
       <InputBase
