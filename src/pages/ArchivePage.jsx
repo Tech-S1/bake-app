@@ -4,11 +4,10 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import archive from "../data/archive";
 import Table from "../components/Table";
 import CenterBox from "../components/CenterBox";
-import getAllBakeOffs from "../apis/getAllBakeOffs";
 import mapParticipantToTable from "../utils/mapParticipantToTable";
+import get, { TYPE } from "../apis/get";
 
 const archiveColumns = [
   { title: "Baker Id", field: "bakerId", type: "numeric" },
@@ -31,19 +30,22 @@ const archiveColumns = [
 ];
 
 const ArchivePage = () => {
-  const [date, setDate] = useState();
-  const [archiveData, setArchiveData] = useState([]);
+  const [selectedDate, setSelectedDate] = useState();
+  const [allBakeOffs, setAllBakeOffs] = useState([]);
 
-  useEffect(() => {
-    getAllBakeOffs(
-      (successData) => {
-        setArchiveData(successData.bakeoffs);
-      },
-      (errorData) => {
-        console.log(errorData); //TODO: Handle Error
-      }
-    );
-  }, []);
+  useEffect(
+    () =>
+      get(
+        TYPE.ALL_BAKE_OFFS,
+        ({ bakeoffs }) => {
+          setAllBakeOffs(bakeoffs);
+        },
+        (errorData) => {
+          console.log(errorData); //TODO: Handle Error
+        }
+      ),
+    []
+  );
 
   return (
     <DefaultLayout>
@@ -52,25 +54,23 @@ const ArchivePage = () => {
           <FormControl fullWidth>
             <InputLabel>Competition</InputLabel>
             <Select
-              value={date}
+              value={selectedDate}
               label="Competition"
-              onChange={({ target }) => setDate(target.value)}
+              onChange={({ target }) => setSelectedDate(target.value)}
             >
-              {archiveData.map((archiveDataItem) => (
-                <MenuItem
-                  value={archiveDataItem.date}
-                >{`${archiveDataItem.date} - ${archiveDataItem.title}`}</MenuItem>
+              {allBakeOffs.map(({ date, title }) => (
+                <MenuItem value={date}>{`${date} - ${title}`}</MenuItem>
               ))}
             </Select>
           </FormControl>
         </CenterBox>
       </CenterBox>
-      {date && (
+      {selectedDate && (
         <Table
           title="Scores"
           columns={archiveColumns}
-          data={archiveData
-            .filter((archiveDataItem) => archiveDataItem.date === date)[0]
+          data={allBakeOffs
+            .filter(({ date }) => date === selectedDate)[0]
             .participants.map(mapParticipantToTable)}
         />
       )}

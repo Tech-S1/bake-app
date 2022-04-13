@@ -3,12 +3,12 @@ import Table from "../components/Table";
 import DefaultLayout from "../containers/DefaultLayout";
 import Typography from "@mui/material/Typography";
 import { Stack } from "@mui/material";
-import getLatestBakeOff from "../apis/getLatestBakeOff";
 import { qrEnabled } from "../constants";
 import CenterBox from "../components/CenterBox";
 import Donate from "../components/Donate";
 import ToggleSwitch from "../components/ToggleSwitch";
 import mapParticipantToTable from "../utils/mapParticipantToTable";
+import get, { TYPE } from "../apis/get";
 
 const bakerIdCol = { title: "Baker Id", field: "bakerId" };
 const bakerNameCol = { title: "Baker Name", field: "name" };
@@ -36,7 +36,8 @@ const HomePage = () => {
   const [latestBakeData, setLatestBakeData] = useState();
 
   useEffect(() => {
-    getLatestBakeOff(
+    get(
+      TYPE.LATEST_BAKE_OFF,
       (successData) => {
         console.log();
         setLatestBakeData(successData.bakeoffs[0]);

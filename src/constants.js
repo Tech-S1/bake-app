@@ -5,6 +5,8 @@ const baseEndpoint = "/bakeoff";
 const latestEndpoint = `${baseEndpoint}/latest`;
 const judgeEndpoint = `${baseEndpoint}/judge`;
 const bakerEndpoint = `${baseEndpoint}/baker`;
+const participantEndpoint = `${baseEndpoint}/participant`;
+const resultEndpoint = `${baseEndpoint}/result`;
 
 export {
   qrEnabled,
@@ -13,4 +15,6 @@ export {
   latestEndpoint,
   judgeEndpoint,
   bakerEndpoint,
+  participantEndpoint,
+  resultEndpoint,
 };
