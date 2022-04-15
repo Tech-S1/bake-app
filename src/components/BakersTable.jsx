@@ -96,7 +96,10 @@ const BakersTable = ({ bakersData, setBakersData }) => {
             bakerName: baker.name,
           }))}
           editable={tableEditBakersData}
-          options={{ actionsColumnIndex: -1 }}
+          options={{
+            actionsColumnIndex: -1,
+            detailPanelType: "single",
+          }}
         />
       )}
     </>

@@ -109,7 +109,10 @@ const ParticipantTable = ({
           })}
           data={participantData}
           editable={tableEditParticipantData}
-          options={{ actionsColumnIndex: -1 }}
+          options={{
+            actionsColumnIndex: -1,
+            detailPanelType: "single",
+          }}
         />
       )}
     </>

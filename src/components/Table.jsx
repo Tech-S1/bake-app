@@ -1,7 +1,7 @@
 import React from "react";
 import MaterialTable from "@material-table/core";
 
-const Table = ({ title, columns, data, editable, detailPanel }) => {
+const Table = ({ title, columns, data, editable, detailPanel, options }) => {
   return (
     <div style={{ maxWidth: "100%", padding: "0 50px" }}>
       <MaterialTable
@@ -10,10 +10,15 @@ const Table = ({ title, columns, data, editable, detailPanel }) => {
         data={data}
         editable={editable}
         detailPanel={detailPanel}
-        options={{ actionsColumnIndex: -1, detailPanelType: "single" }}
+        options={options}
       />
     </div>
   );
 };
 
 export default Table;
+// {
+//   actionsColumnIndex: -1,
+//   detailPanelType: "single",
+//   paging: false,
+// }

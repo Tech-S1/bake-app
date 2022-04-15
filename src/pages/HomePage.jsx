@@ -82,6 +82,11 @@ const HomePage = () => {
             columns={[showName ? bakerNameCol : bakerIdCol, ...scoreColumns]}
             data={latestBakeData.participants.map(mapParticipantToTable)}
             detailPanel={detailsRow}
+            options={{
+              actionsColumnIndex: -1,
+              detailPanelType: "single",
+              paging: false,
+            }}
           />
           <CenterBox height={50}>
             <ToggleSwitch

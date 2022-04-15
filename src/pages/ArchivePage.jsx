@@ -72,6 +72,11 @@ const ArchivePage = () => {
           data={allBakeOffs
             .filter(({ date }) => date === selectedDate)[0]
             .participants.map(mapParticipantToTable)}
+          options={{
+            actionsColumnIndex: -1,
+            detailPanelType: "single",
+            paging: false,
+          }}
         />
       )}
     </DefaultLayout>

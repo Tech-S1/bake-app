@@ -183,6 +183,11 @@ const ScoresPage = () => {
           columns={scoreColumns.map(mapScoreColumns)}
           data={scoresData.map(mapScoreData)}
           editable={editScoresData}
+          options={{
+            actionsColumnIndex: -1,
+            detailPanelType: "single",
+            paging: false,
+          }}
         />
       )}
     </DefaultLayout>
