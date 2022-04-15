@@ -9,6 +9,7 @@ import Donate from "../components/Donate";
 import ToggleSwitch from "../components/ToggleSwitch";
 import mapParticipantToTable from "../utils/mapParticipantToTable";
 import get, { TYPE } from "../apis/get";
+import SimpleTable from "../components/SimpleTable";
 
 const bakerIdCol = { title: "Baker Id", field: "bakerId" };
 const bakerNameCol = { title: "Baker Name", field: "name" };
@@ -69,6 +70,17 @@ const HomePage = () => {
             title="Scores"
             columns={[showName ? bakerNameCol : bakerIdCol, ...scoreColumns]}
             data={latestBakeData.participants.map(mapParticipantToTable)}
+            detailPanel={({ rowData }) => {
+              return (
+                <SimpleTable
+                  rows={
+                    latestBakeData.participants.filter(
+                      (item) => rowData.bakerId === item.entrantId
+                    )[0]
+                  }
+                />
+              );
+            }}
           />
           <CenterBox height={50}>
             <ToggleSwitch
