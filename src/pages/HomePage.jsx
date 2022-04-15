@@ -49,6 +49,17 @@ const HomePage = () => {
     );
   }, []);
 
+  const detailsRow = ({ rowData }) => {
+    const rows = latestBakeData.participants.filter(
+      (item) => rowData.bakerId === item.entrantId
+    )[0];
+    return rows.results.length === 0 ? (
+      <CenterBox height={50}>No Scores</CenterBox>
+    ) : (
+      <SimpleTable rows={rows} />
+    );
+  };
+
   return (
     <DefaultLayout>
       {latestBakeData && (
@@ -70,17 +81,7 @@ const HomePage = () => {
             title="Scores"
             columns={[showName ? bakerNameCol : bakerIdCol, ...scoreColumns]}
             data={latestBakeData.participants.map(mapParticipantToTable)}
-            detailPanel={({ rowData }) => {
-              return (
-                <SimpleTable
-                  rows={
-                    latestBakeData.participants.filter(
-                      (item) => rowData.bakerId === item.entrantId
-                    )[0]
-                  }
-                />
-              );
-            }}
+            detailPanel={detailsRow}
           />
           <CenterBox height={50}>
             <ToggleSwitch

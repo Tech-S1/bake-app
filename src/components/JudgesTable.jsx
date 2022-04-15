@@ -102,6 +102,7 @@ const JudgesTable = ({ judgesData, setJudgesData }) => {
             judgeName: judge.name,
           }))}
           editable={tableEditJudgesData}
+          options={{ actionsColumnIndex: -1 }}
         />
       )}
     </>

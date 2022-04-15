@@ -41,14 +41,6 @@ const scoreColumns = [
   },
 ];
 
-const judgeIdToName = ({ newData, judgesData }) => ({
-  ...newData,
-  judgeId: judgesData.filter(
-    (judge) => judge.judgeName === newData.judgeName
-  )[0].judgeId,
-  judgeName: null,
-});
-
 const ScoresPage = () => {
   const [scoresData, setScoresData] = useState([]);
   const [judgesData, setJudgesData] = useState();
@@ -104,7 +96,6 @@ const ScoresPage = () => {
     onRowAdd: (newData) =>
       new Promise((resolve, reject) =>
         setTimeout(() => {
-          console.log("TESAT");
           return create(
             CREATE_TYPE.RESULTS,
             {
@@ -156,37 +147,41 @@ const ScoresPage = () => {
     // }),
   };
 
+  const mapScoreColumns = (column) => {
+    if (column.field === "entrantId") {
+      const obj = {};
+      participantData
+        .map((data) => data.entrantId)
+        .forEach((element) => {
+          obj[element] = element;
+        });
+      return { ...column, lookup: obj };
+    }
+    if (column.field === "judgeName") {
+      const obj = {};
+      judgesData
+        .map((data) => data.name)
+        .forEach((element) => {
+          obj[element] = element;
+        });
+      return { ...column, lookup: obj };
+    }
+    return column;
+  };
+
+  const mapScoreData = (item) => ({
+    ...item,
+    total: item.appearance + item.taste,
+  });
+
   return (
     <DefaultLayout>
       <CenterBox />
       {judgesData && participantData && (
         <Table
           title="Scores"
-          columns={scoreColumns.map((column) => {
-            if (column.field === "entrantId") {
-              const obj = {};
-              participantData
-                .map((data) => data.entrantId)
-                .forEach((element) => {
-                  obj[element] = element;
-                });
-              return { ...column, lookup: obj };
-            }
-            if (column.field === "judgeName") {
-              const obj = {};
-              judgesData
-                .map((data) => data.name)
-                .forEach((element) => {
-                  obj[element] = element;
-                });
-              return { ...column, lookup: obj };
-            }
-            return column;
-          })}
-          data={scoresData.map((item) => ({
-            ...item,
-            total: item.appearance + item.taste,
-          }))}
+          columns={scoreColumns.map(mapScoreColumns)}
+          data={scoresData.map(mapScoreData)}
           editable={editScoresData}
         />
       )}

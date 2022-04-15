@@ -10,6 +10,7 @@ const Table = ({ title, columns, data, editable, detailPanel }) => {
         data={data}
         editable={editable}
         detailPanel={detailPanel}
+        options={{ actionsColumnIndex: -1, detailPanelType: "single" }}
       />
     </div>
   );
