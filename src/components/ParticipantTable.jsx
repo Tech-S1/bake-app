@@ -109,6 +109,7 @@ const ParticipantTable = ({
           })}
           data={participantData}
           editable={tableEditParticipantData}
+          options={{ actionsColumnIndex: -1 }}
         />
       )}
     </>
