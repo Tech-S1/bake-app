@@ -1,4 +1,4 @@
-import { baseEndpoint, baseurl } from "../constants";
+import { bakeoffEndpoint, baseurl } from "../constants";
 
 const ACTION = {
   CREATE: "POST",
@@ -7,7 +7,7 @@ const ACTION = {
 
 const updateBakeOff = (action, name, callbackSuccess, callbackError) =>
   fetch(
-    `${baseurl}${baseEndpoint}?` +
+    `${baseurl}${bakeoffEndpoint}?` +
       new URLSearchParams({
         name,
       }),
