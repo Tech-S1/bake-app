@@ -16,6 +16,7 @@ const EventsSimpleTable = ({ rows }) => {
             <TableRow>
               <TableCell>Bakeoff</TableCell>
               <TableCell>Description</TableCell>
+              <TableCell align="right">Entrant Id</TableCell>
               <TableCell align="right">Total Appearance Score</TableCell>
               <TableCell align="right">Total Taste Score</TableCell>
               <TableCell align="right">Total Score</TableCell>
@@ -29,6 +30,7 @@ const EventsSimpleTable = ({ rows }) => {
               >
                 <TableCell>{row.bakeoffDescription}</TableCell>
                 <TableCell>{row.description}</TableCell>
+                <TableCell align="right">{row.entrantId}</TableCell>
                 <TableCell align="right">{row.totalAppearance}</TableCell>
                 <TableCell align="right">{row.totalTaste}</TableCell>
                 <TableCell align="right">

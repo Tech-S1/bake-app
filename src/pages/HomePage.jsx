@@ -11,7 +11,7 @@ import mapParticipantToTable from "../utils/mapParticipantToTable";
 import get, { TYPE } from "../apis/get";
 import SimpleTable from "../components/SimpleTable";
 
-const bakerIdCol = { title: "Baker Id", field: "bakerId" };
+const bakerIdCol = { title: "Entrant Id", field: "bakerId" };
 const bakerNameCol = { title: "Baker Name", field: "name" };
 
 const scoreColumns = [

@@ -75,6 +75,7 @@ const RunningTotalPage = () => {
               paging: false,
             }}
           />
+          <CenterBox height={50} />
         </>
       )}
     </DefaultLayout>
