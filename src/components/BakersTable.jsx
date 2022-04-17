@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
 import Table from "./Table";
-import add, { TYPE } from "../apis/add";
-import get from "../apis/get";
+import add, { TYPE as ADD_TYPE } from "../apis/add";
+import get, { TYPE as GET_TYPE } from "../apis/get";
+import update, { TYPE as UPDATE_TYPE } from "../apis/update";
+import deleteItem, { TYPE as DELETE_TYPE } from "../apis/delete";
+import deleteBaker from "../apis/deleteBaker";
 
 const bakersColumns = [
   { title: "Baker Id", field: "bakerId", type: "numeric", editable: "never" },
@@ -21,7 +24,7 @@ const BakersTable = ({ bakersData, setBakersData }) => {
   useEffect(
     () =>
       get(
-        TYPE.BAKERS,
+        GET_TYPE.BAKERS,
         ({ bakers }) => {
           setBakersData(bakers);
         },
@@ -38,7 +41,7 @@ const BakersTable = ({ bakersData, setBakersData }) => {
         setTimeout(
           () =>
             add(
-              TYPE.BAKERS,
+              ADD_TYPE.BAKERS,
               newData.bakerName,
               () => {
                 setBakersData([
@@ -61,28 +64,48 @@ const BakersTable = ({ bakersData, setBakersData }) => {
         )
       ),
     onRowUpdate: (newData, oldData) =>
-      new Promise((resolve, reject) => reject()), //TODO: Implement
-    // new Promise((resolve, reject) => {
-    //   setTimeout(() => {
-    //     const dataUpdate = [...bakersData];
-    //     const index = oldData.tableData.id;
-    //     dataUpdate[index] = newData;
-    //     setBakersData([...dataUpdate]);
-    //     //TODO: Update Baker (API Call)
-    //     resolve();
-    //   }, 1000);
-    // }),
-    onRowDelete: (oldData) => new Promise((resolve, reject) => reject()), //TODO: Implement
-    // new Promise((resolve, reject) => {
-    //   setTimeout(() => {
-    //     const dataDelete = [...bakersData];
-    //     const index = oldData.tableData.id;
-    //     dataDelete.splice(index, 1);
-    //     setBakersData([...dataDelete]);
-    //     //TODO: Delete Baker (API Call)
-    //     resolve();
-    //   }, 1000);
-    // }),
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          return update(
+            UPDATE_TYPE.BAKERS,
+            {
+              oldName: oldData.bakerName,
+              newName: newData.bakerName,
+            },
+            () => {
+              const dataUpdate = [...bakersData];
+              const index = oldData.tableData.id;
+              dataUpdate[index] = {
+                id: parseInt(newData.bakerId),
+                name: newData.bakerName,
+              };
+              setBakersData([...dataUpdate]);
+              resolve();
+            },
+            () => {
+              reject();
+            }
+          );
+        }, 1000);
+      }),
+    onRowDelete: (oldData) =>
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          return deleteBaker(
+            oldData.bakerName,
+            () => {
+              const dataDelete = [...bakersData];
+              const index = oldData.tableData.id;
+              dataDelete.splice(index, 1);
+              setBakersData([...dataDelete]);
+              resolve();
+            },
+            () => {
+              reject();
+            }
+          );
+        }, 1000);
+      }),
   };
 
   return (
