@@ -15,6 +15,7 @@ const bakerIdCol = { title: "Entrant Id", field: "bakerId" };
 const bakerNameCol = { title: "Baker Name", field: "name" };
 
 const scoreColumns = [
+  { title: "Description", field: "description" },
   {
     title: "Appearance Score ",
     field: "appearance",

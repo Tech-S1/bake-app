@@ -13,6 +13,7 @@ import SimpleTable from "../components/SimpleTable";
 const archiveColumns = [
   { title: "Entrant Id", field: "bakerId", type: "numeric" },
   { title: "Baker Name", field: "name" },
+  { title: "Description", field: "description" },
   {
     title: "Appearance Score ",
     field: "appearance",
