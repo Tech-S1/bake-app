@@ -8,6 +8,7 @@ import Table from "../components/Table";
 import CenterBox from "../components/CenterBox";
 import mapParticipantToTable from "../utils/mapParticipantToTable";
 import get, { TYPE } from "../apis/get";
+import SimpleTable from "../components/SimpleTable";
 
 const archiveColumns = [
   { title: "Baker Id", field: "bakerId", type: "numeric" },
@@ -47,6 +48,17 @@ const ArchivePage = () => {
     []
   );
 
+  const detailsRow = ({ rowData }) => {
+    const rows = allBakeOffs
+      .filter(({ date }) => date === selectedDate)[0]
+      .participants.filter((item) => rowData.bakerId === item.entrantId)[0];
+    return rows.results.length === 0 ? (
+      <CenterBox height={50}>No Scores</CenterBox>
+    ) : (
+      <SimpleTable rows={rows} />
+    );
+  };
+
   return (
     <DefaultLayout>
       <CenterBox height={100}>
@@ -72,6 +84,7 @@ const ArchivePage = () => {
           data={allBakeOffs
             .filter(({ date }) => date === selectedDate)[0]
             .participants.map(mapParticipantToTable)}
+          detailPanel={detailsRow}
           options={{
             actionsColumnIndex: -1,
             detailPanelType: "single",
