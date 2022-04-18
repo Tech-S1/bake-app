@@ -1,5 +1,6 @@
 const mapParticipantToTable = (participant) => ({
   bakerId: participant.entrantId,
+  description: participant.description,
   name: participant.name,
   appearance:
     participant.results.length === 0

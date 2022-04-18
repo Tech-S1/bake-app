@@ -4,6 +4,7 @@ import {
   baseurl,
   judgeEndpoint,
   latestEndpoint,
+  totalsEndpoint,
 } from "../constants";
 
 const TYPE = {
@@ -11,6 +12,7 @@ const TYPE = {
   BAKERS: bakerEndpoint,
   ALL_BAKE_OFFS: baseEndpoint,
   LATEST_BAKE_OFF: latestEndpoint,
+  TOTALS: totalsEndpoint,
 };
 
 const get = (type, callbackSuccess, callbackError) =>

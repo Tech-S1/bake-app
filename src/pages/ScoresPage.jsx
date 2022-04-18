@@ -5,15 +5,19 @@ import CenterBox from "../components/CenterBox";
 import get, { TYPE as GET_TYPE } from "../apis/get";
 import currentDate from "../utils/currentDate";
 import create, { TYPE as CREATE_TYPE } from "../apis/create";
+import update, { TYPE as UPDATE_TYPE } from "../apis/update";
+import deleteItem, { TYPE as DELETE_TYPE } from "../apis/delete";
 
 const scoreColumns = [
   {
     title: "Entrant Id",
     field: "entrantId",
+    editable: "never",
   },
   {
     title: "Judge Name",
     field: "judgeName",
+    editable: "never",
   },
   {
     title: "Appearance Score ",
@@ -123,28 +127,53 @@ const ScoresPage = () => {
         }, 1000)
       ),
     onRowUpdate: (newData, oldData) =>
-      new Promise((resolve, reject) => reject()), //TODO: Implement
-    // new Promise((resolve, reject) => {
-    //   setTimeout(() => {
-    //     const dataUpdate = [...scoresData];
-    //     const index = oldData.tableData.id;
-    //     dataUpdate[index] = judgeIdToName({ newData, judgesData });
-    //     setScoresData([...dataUpdate]);
-    //     //TODO: Update Score (API Call)
-    //     resolve();
-    //   }, 1000);
-    // }),
-    onRowDelete: (oldData) => new Promise((resolve, reject) => reject()), //TODO: Implement
-    // new Promise((resolve, reject) => {
-    //   setTimeout(() => {
-    //     const dataDelete = [...scoresData];
-    //     const index = oldData.tableData.id;
-    //     dataDelete.splice(index, 1);
-    //     setScoresData([...dataDelete]);
-    //     //TODO: Delete Score (API Call)
-    //     resolve();
-    //   }, 1000);
-    // }),
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          return update(
+            UPDATE_TYPE.RESULTS,
+            {
+              entrantId: parseInt(oldData.entrantId),
+              judgeName: oldData.judgeName,
+              appearance: newData.appearance,
+              taste: newData.taste,
+            },
+            () => {
+              const dataUpdate = [...scoresData];
+              const index = oldData.tableData.id;
+              dataUpdate[index] = newData;
+              setScoresData([...dataUpdate]);
+              resolve();
+            },
+            () => {
+              reject();
+            }
+          );
+        }, 1000);
+      }),
+    onRowDelete: (oldData) =>
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          return deleteItem(
+            DELETE_TYPE.RESULTS,
+            {
+              entrantId: parseInt(oldData.entrantId),
+              judgeName: oldData.judgeName,
+              appearance: oldData.appearance,
+              taste: oldData.taste,
+            },
+            () => {
+              const dataDelete = [...scoresData];
+              const index = oldData.tableData.id;
+              dataDelete.splice(index, 1);
+              setScoresData([...dataDelete]);
+              resolve();
+            },
+            () => {
+              reject();
+            }
+          );
+        }, 1000);
+      }),
   };
 
   const mapScoreColumns = (column) => {

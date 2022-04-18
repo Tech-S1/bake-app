@@ -8,6 +8,7 @@ const judgeEndpoint = `${baseEndpoint}/judge`;
 const bakerEndpoint = `${baseEndpoint}/baker`;
 const participantEndpoint = `${baseEndpoint}/participant`;
 const resultEndpoint = `${baseEndpoint}/result`;
+const totalsEndpoint = `${baseEndpoint}/totals`;
 
 export {
   qrEnabled,
@@ -19,4 +20,5 @@ export {
   participantEndpoint,
   resultEndpoint,
   bakeoffEndpoint,
+  totalsEndpoint,
 };
