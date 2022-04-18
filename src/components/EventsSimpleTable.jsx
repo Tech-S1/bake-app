@@ -7,30 +7,34 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-const SimpleTable = ({ rows }) => {
+const EventsSimpleTable = ({ rows }) => {
   return (
     <>
       <TableContainer style={{ padding: "20px" }} component={Paper}>
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Judge Name</TableCell>
-              <TableCell align="right">Appearance Score</TableCell>
-              <TableCell align="right">Taste Score</TableCell>
+              <TableCell>Bakeoff</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell align="right">Entrant Id</TableCell>
+              <TableCell align="right">Total Appearance Score</TableCell>
+              <TableCell align="right">Total Taste Score</TableCell>
               <TableCell align="right">Total Score</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.results.map((row) => (
+            {rows.events.map((row) => (
               <TableRow
                 key={row.name}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell>{row.judgeName}</TableCell>
-                <TableCell align="right">{row.appearance}</TableCell>
-                <TableCell align="right">{row.taste}</TableCell>
+                <TableCell>{row.bakeoffDescription}</TableCell>
+                <TableCell>{row.description}</TableCell>
+                <TableCell align="right">{row.entrantId}</TableCell>
+                <TableCell align="right">{row.totalAppearance}</TableCell>
+                <TableCell align="right">{row.totalTaste}</TableCell>
                 <TableCell align="right">
-                  {row.appearance + row.taste}
+                  {row.totalAppearance + row.totalTaste}
                 </TableCell>
               </TableRow>
             ))}
@@ -41,4 +45,4 @@ const SimpleTable = ({ rows }) => {
   );
 };
 
-export default SimpleTable;
+export default EventsSimpleTable;

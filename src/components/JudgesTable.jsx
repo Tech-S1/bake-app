@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Table from "./Table";
 import add, { TYPE } from "../apis/add";
 import get from "../apis/get";
+import update, { TYPE as UPDATE_TYPE } from "../apis/update";
 
 const judgesColumns = [
   {
@@ -66,17 +67,30 @@ const JudgesTable = ({ judgesData, setJudgesData }) => {
         )
       ),
     onRowUpdate: (newData, oldData) =>
-      new Promise((resolve, reject) => reject()), //TODO: Implement
-    //   new Promise((resolve, reject) => {
-    //     setTimeout(() => {
-    //       const dataUpdate = [...judgesData];
-    //       const index = oldData.tableData.id;
-    //       dataUpdate[index] = newData;
-    //       setJudgesData([...dataUpdate]);
-    //       //TODO: Update Judges (API Call)
-    //       resolve();
-    //     }, 1000);
-    //   }),
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          return update(
+            UPDATE_TYPE.JUDGES,
+            {
+              oldName: oldData.judgeName,
+              newName: newData.judgeName,
+            },
+            () => {
+              const dataUpdate = [...judgesData];
+              const index = oldData.tableData.id;
+              dataUpdate[index] = {
+                id: newData.judgeId,
+                name: newData.judgeName,
+              };
+              setJudgesData([...dataUpdate]);
+              resolve();
+            },
+            () => {
+              reject();
+            }
+          );
+        }, 1000);
+      }),
 
     onRowDelete: (oldData) => new Promise((resolve, reject) => reject()), //TODO: Implement
     //   new Promise((resolve, reject) => {
