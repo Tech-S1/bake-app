@@ -3,7 +3,6 @@ import Table from "./Table";
 import add, { TYPE } from "../apis/add";
 import get from "../apis/get";
 import update, { TYPE as UPDATE_TYPE } from "../apis/update";
-import deleteJudge from "../apis/deleteJudge";
 
 const judgesColumns = [
   {
@@ -85,25 +84,6 @@ const JudgesTable = ({ judgesData, setJudgesData }) => {
                 name: newData.judgeName,
               };
               setJudgesData([...dataUpdate]);
-              resolve();
-            },
-            () => {
-              reject();
-            }
-          );
-        }, 1000);
-      }),
-
-    onRowDelete: (oldData) =>
-      new Promise((resolve, reject) => {
-        setTimeout(() => {
-          return deleteJudge(
-            oldData.judgeName,
-            () => {
-              const dataDelete = [...judgesData];
-              const index = oldData.tableData.id;
-              dataDelete.splice(index, 1);
-              setJudgesData([...dataDelete]);
               resolve();
             },
             () => {
