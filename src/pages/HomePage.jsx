@@ -23,7 +23,9 @@ const HomePage = () => {
 
   const QRCode = () => (
     <CenterBox>
-      {qrEnabled === "true" && <Donate url="www.google.com" />}
+      {qrEnabled === "true" && (
+        <Donate url="https://www.paypal.com/pools/c/8ILqSxkv4E" />
+      )}
     </CenterBox>
   );
 
