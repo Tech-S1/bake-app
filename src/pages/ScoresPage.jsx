@@ -177,13 +177,15 @@ const ScoresPage = () => {
   };
 
   const validateUnique = (rowData) =>
+    rowData.entrantId &&
+    rowData.judgeName &&
     scoresData.filter(
       (scoreData) =>
         scoreData.entrantId == rowData.entrantId &&
         scoreData.judgeName == rowData.judgeName
     ).length === 0
       ? true
-      : "Entrant Id / Judge Name Exists";
+      : "Unique Combination Needed";
 
   const mapScoreColumns = (column) => {
     console.log(scoresData);
