@@ -24,7 +24,7 @@ const scoreColumns = [
     field: "appearance",
     type: "numeric",
     validate: (rowData) =>
-      rowData.appearance > 5 || rowData.appearance < 0
+      !rowData.appearance || rowData.appearance > 5 || rowData.appearance < 0
         ? "Must be between 0 and 5"
         : true,
   },
@@ -33,7 +33,7 @@ const scoreColumns = [
     field: "taste",
     type: "numeric",
     validate: (rowData) =>
-      rowData.taste > 10 || rowData.taste < 0
+      !rowData.taste || rowData.taste > 10 || rowData.taste < 0
         ? "Must be between 0 and 10"
         : true,
   },
