@@ -176,7 +176,17 @@ const ScoresPage = () => {
       }),
   };
 
+  const validateUnique = (rowData) =>
+    scoresData.filter(
+      (scoreData) =>
+        scoreData.entrantId == rowData.entrantId &&
+        scoreData.judgeName == rowData.judgeName
+    ).length === 0
+      ? true
+      : "Entrant Id / Judge Name Exists";
+
   const mapScoreColumns = (column) => {
+    console.log(scoresData);
     if (column.field === "entrantId") {
       const obj = {};
       participantData
@@ -184,7 +194,12 @@ const ScoresPage = () => {
         .forEach((element) => {
           obj[element] = element;
         });
-      return { ...column, lookup: obj };
+      console.log(scoresData);
+      return {
+        ...column,
+        lookup: obj,
+        validate: validateUnique,
+      };
     }
     if (column.field === "judgeName") {
       const obj = {};
@@ -193,7 +208,7 @@ const ScoresPage = () => {
         .forEach((element) => {
           obj[element] = element;
         });
-      return { ...column, lookup: obj };
+      return { ...column, lookup: obj, validate: validateUnique };
     }
     return column;
   };

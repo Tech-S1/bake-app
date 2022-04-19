@@ -6,7 +6,9 @@ import { singleRowOptions } from "./options";
 import Table from "./Table";
 
 const descriptionValidator = (rowData) =>
-  !rowData.name || rowData.name.length > 28 || rowData.name.length < 3
+  !rowData.description ||
+  rowData.description.length > 28 ||
+  rowData.description.length < 3
     ? "Must be between 3 and 28"
     : true;
 
