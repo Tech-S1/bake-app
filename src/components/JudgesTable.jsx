@@ -3,6 +3,7 @@ import Table from "./Table";
 import add, { TYPE } from "../apis/add";
 import get from "../apis/get";
 import update, { TYPE as UPDATE_TYPE } from "../apis/update";
+import deleteJudge from "../apis/deleteJudge";
 
 const judgesColumns = [
   {
@@ -10,6 +11,7 @@ const judgesColumns = [
     field: "judgeId",
     type: "numeric",
     editable: "never",
+    hidden: "true",
   },
   {
     title: "Name",
@@ -92,17 +94,24 @@ const JudgesTable = ({ judgesData, setJudgesData }) => {
         }, 1000);
       }),
 
-    onRowDelete: (oldData) => new Promise((resolve, reject) => reject()), //TODO: Implement
-    //   new Promise((resolve, reject) => {
-    //     setTimeout(() => {
-    //       const dataDelete = [...judgesData];
-    //       const index = oldData.tableData.id;
-    //       dataDelete.splice(index, 1);
-    //       setJudgesData([...dataDelete]);
-    //       //TODO: Delete Judge (API Call)
-    //       resolve();
-    //     }, 1000);
-    //   }),
+    onRowDelete: (oldData) =>
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          return deleteJudge(
+            oldData.judgeName,
+            () => {
+              const dataDelete = [...judgesData];
+              const index = oldData.tableData.id;
+              dataDelete.splice(index, 1);
+              setJudgesData([...dataDelete]);
+              resolve();
+            },
+            () => {
+              reject();
+            }
+          );
+        }, 1000);
+      }),
   };
 
   return (

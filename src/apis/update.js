@@ -3,12 +3,14 @@ import {
   judgeEndpoint,
   bakerEndpoint,
   resultEndpoint,
+  participantEndpoint,
 } from "../constants";
 
 const TYPE = {
   RESULTS: resultEndpoint,
   JUDGES: judgeEndpoint,
   BAKERS: bakerEndpoint,
+  PARTICIPANT: participantEndpoint,
 };
 
 const update = (type, data, callbackSuccess, callbackError) =>
