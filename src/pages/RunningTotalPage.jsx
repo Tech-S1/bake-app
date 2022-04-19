@@ -9,7 +9,7 @@ import mapBakerToTable from "../utils/mapBakerToTable";
 import EventsSimpleTable from "../components/EventsSimpleTable";
 
 const totalColumns = [
-  { title: "Baker Id", field: "id", type: "numeric" },
+  { title: "Baker Id", field: "id", type: "numeric", hidden: "true" },
   { title: "Baker Name", field: "name" },
   {
     title: "Appearance Score ",

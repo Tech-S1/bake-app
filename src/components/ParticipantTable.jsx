@@ -1,5 +1,7 @@
 import React from "react";
-import create, { TYPE } from "../apis/create";
+import create, { TYPE as CREATE_TYPE } from "../apis/create";
+import deleteParticipant from "../apis/deleteParticipant";
+import update, { TYPE as UPDATE_TYPE } from "../apis/update";
 import Table from "./Table";
 
 const participantColumns = [
@@ -38,7 +40,7 @@ const ParticipantTable = ({
               : Math.max(...participantData.map(({ entrantId }) => entrantId)) +
                 1;
           return create(
-            TYPE.PARTICIPANT,
+            CREATE_TYPE.PARTICIPANT,
             {
               entrantId: entrantId,
               bakerId: bakersData.filter(
@@ -65,29 +67,49 @@ const ParticipantTable = ({
       ),
 
     onRowUpdate: (newData, oldData) =>
-      new Promise((resolve, reject) => reject()), //TODO: Implement
-    //   new Promise((resolve, reject) => {
-    //     setTimeout(() => {
-    //       const dataUpdate = [...judgesData];
-    //       const index = oldData.tableData.id;
-    //       dataUpdate[index] = newData;
-    //       setJudgesData([...dataUpdate]);
-    //       //TODO: Update Judges (API Call)
-    //       resolve();
-    //     }, 1000);
-    //   }),
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          return update(
+            UPDATE_TYPE.PARTICIPANT,
+            {
+              entrantId: oldData.entrantId,
+              bakerId: bakersData.filter(
+                (baker) => baker.name === newData.name
+              )[0].id,
+              description: newData.description,
+            },
+            () => {
+              const dataUpdate = [...participantData];
+              const index = oldData.tableData.id;
+              dataUpdate[index] = newData;
+              setParticipantData([...dataUpdate]);
+              resolve();
+            },
+            () => {
+              reject();
+            }
+          );
+        }, 1000);
+      }),
 
-    onRowDelete: (oldData) => new Promise((resolve, reject) => reject()), //TODO: Implement
-    //   new Promise((resolve, reject) => {
-    //     setTimeout(() => {
-    //       const dataDelete = [...judgesData];
-    //       const index = oldData.tableData.id;
-    //       dataDelete.splice(index, 1);
-    //       setJudgesData([...dataDelete]);
-    //       //TODO: Delete Judge (API Call)
-    //       resolve();
-    //     }, 1000);
-    //   }),
+    onRowDelete: (oldData) =>
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          return deleteParticipant(
+            oldData.entrantId,
+            () => {
+              const dataDelete = [...participantData];
+              const index = oldData.tableData.id;
+              dataDelete.splice(index, 1);
+              setParticipantData([...dataDelete]);
+              resolve();
+            },
+            () => {
+              reject();
+            }
+          );
+        }, 1000);
+      }),
   };
 
   return (

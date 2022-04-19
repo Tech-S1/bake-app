@@ -12,12 +12,12 @@ const scoreColumns = [
   {
     title: "Entrant Id",
     field: "entrantId",
-    editable: "never",
+    editable: "onAdd",
   },
   {
     title: "Judge Name",
     field: "judgeName",
-    editable: "never",
+    editable: "onAdd",
   },
   {
     title: "Appearance Score ",

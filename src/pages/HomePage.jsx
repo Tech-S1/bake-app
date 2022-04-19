@@ -10,6 +10,8 @@ import ToggleSwitch from "../components/ToggleSwitch";
 import mapParticipantToTable from "../utils/mapParticipantToTable";
 import get, { TYPE } from "../apis/get";
 import SimpleTable from "../components/SimpleTable";
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 
 const bakerIdCol = { title: "Entrant Id", field: "bakerId" };
 const bakerNameCol = { title: "Baker Name", field: "name" };
@@ -82,10 +84,22 @@ const HomePage = () => {
             title="Scores"
             columns={[showName ? bakerNameCol : bakerIdCol, ...scoreColumns]}
             data={latestBakeData.participants.map(mapParticipantToTable)}
-            detailPanel={detailsRow}
+            detailPanel={[
+              { icon: () => <PersonSearchIcon />, render: detailsRow },
+              {
+                icon: () => <PhotoCameraIcon />,
+                render: () => (
+                  <CenterBox height={325}>
+                    <img
+                      height="300"
+                      src="https://upload.wikimedia.org/wikipedia/commons/1/11/Test-Logo.svg"
+                    />
+                  </CenterBox>
+                ),
+              },
+            ]}
             options={{
               actionsColumnIndex: -1,
-              detailPanelType: "single",
               paging: false,
             }}
           />

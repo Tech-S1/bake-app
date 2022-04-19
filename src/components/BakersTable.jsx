@@ -7,7 +7,13 @@ import deleteItem, { TYPE as DELETE_TYPE } from "../apis/delete";
 import deleteBaker from "../apis/deleteBaker";
 
 const bakersColumns = [
-  { title: "Baker Id", field: "bakerId", type: "numeric", editable: "never" },
+  {
+    title: "Baker Id",
+    field: "bakerId",
+    type: "numeric",
+    editable: "never",
+    hidden: "true",
+  },
   {
     title: "Name",
     field: "bakerName",
