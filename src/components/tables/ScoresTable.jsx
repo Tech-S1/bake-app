@@ -78,15 +78,17 @@ const detailsPanel = ({ participants }) => [
   },
   {
     icon: () => <PhotoCameraIcon />,
-    render: () => (
-      //TODO Update to return image
-      <CenterBox height={325}>
-        <img
-          height="300"
-          src="https://upload.wikimedia.org/wikipedia/commons/1/11/Test-Logo.svg"
-        />
-      </CenterBox>
-    ),
+    render: ({ rowData }) =>
+      rowData.images ? (
+        <CenterBox height={325}>
+          <img
+            height="300"
+            src="https://upload.wikimedia.org/wikipedia/commons/1/11/Test-Logo.svg"
+          />
+        </CenterBox>
+      ) : (
+        <CenterBox height={50}>No Images</CenterBox>
+      ),
   },
 ];
 
