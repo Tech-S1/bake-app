@@ -2,11 +2,11 @@ import { Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import get, { TYPE } from "../apis/get";
 import CenterBox from "../components/CenterBox";
-import Table from "../components/Table";
+import Table from "../components/tables/Table";
 import DefaultLayout from "../containers/DefaultLayout";
 import Typography from "@mui/material/Typography";
 import mapBakerToTable from "../utils/mapBakerToTable";
-import EventsSimpleTable from "../components/EventsSimpleTable";
+import SimpleTable from "../components/tables/SimpleTable";
 
 const totalColumns = [
   { title: "Baker Id", field: "id", type: "numeric", hidden: "true" },
@@ -25,6 +25,37 @@ const totalColumns = [
     field: "total",
     title: "Total Score",
     type: "numeric",
+  },
+];
+
+const headers = [
+  {
+    title: "Bakeoff",
+    name: "bakeoffDescription",
+  },
+  {
+    title: "Description",
+    name: "description",
+  },
+  {
+    title: "Entrant Id",
+    align: "right",
+    name: "entrantId",
+  },
+  {
+    title: "Total Appearance Score",
+    align: "right",
+    name: "totalAppearance",
+  },
+  {
+    title: "Total Taste Score",
+    align: "right",
+    name: "totalTaste",
+  },
+  {
+    title: "Total Score",
+    align: "right",
+    name: "total",
   },
 ];
 
@@ -47,10 +78,18 @@ const RunningTotalPage = () => {
 
   const detailsRow = ({ rowData }) => {
     const rows = totalsData.filter((item) => rowData.id === item.id)[0];
+    console.log(rows.events);
+
     return rows.events.length === 0 ? (
       <CenterBox height={50}>No Bakeoffs</CenterBox>
     ) : (
-      <EventsSimpleTable rows={rows} />
+      <SimpleTable
+        columns={headers}
+        data={rows.events.map((event) => ({
+          ...event,
+          total: event.totalAppearance + event.totalTaste,
+        }))}
+      />
     );
   };
 

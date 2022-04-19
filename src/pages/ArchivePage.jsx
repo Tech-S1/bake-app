@@ -4,11 +4,11 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import Table from "../components/Table";
+import Table from "../components/tables/Table";
 import CenterBox from "../components/CenterBox";
 import mapParticipantToTable from "../utils/mapParticipantToTable";
 import get, { TYPE } from "../apis/get";
-import SimpleTable from "../components/SimpleTable";
+import SimpleTable from "../components/tables/SimpleTable";
 
 const archiveColumns = [
   { title: "Entrant Id", field: "bakerId", type: "numeric" },
@@ -28,6 +28,28 @@ const archiveColumns = [
     field: "total",
     title: "Total Score",
     type: "numeric",
+  },
+];
+
+const headers = [
+  {
+    title: "Judge Name",
+    name: "judgeName",
+  },
+  {
+    title: "Appearance Score",
+    align: "right",
+    name: "appearance",
+  },
+  {
+    title: "Taste Score",
+    align: "right",
+    name: "taste",
+  },
+  {
+    title: "Total Score",
+    align: "right",
+    name: "total",
   },
 ];
 
@@ -56,7 +78,13 @@ const ArchivePage = () => {
     return rows.results.length === 0 ? (
       <CenterBox height={50}>No Scores</CenterBox>
     ) : (
-      <SimpleTable rows={rows} />
+      <SimpleTable
+        columns={headers}
+        data={rows.results.map((row) => ({
+          ...row,
+          total: row.appearance + row.taste,
+        }))}
+      />
     );
   };
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Table from "../components/Table";
+import Table from "../components/tables/Table";
 import DefaultLayout from "../containers/DefaultLayout";
 import CenterBox from "../components/CenterBox";
 import get, { TYPE as GET_TYPE } from "../apis/get";

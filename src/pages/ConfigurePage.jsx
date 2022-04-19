@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import get, { TYPE } from "../apis/get";
 import updateBakeOff, { ACTION } from "../apis/updateBakeOff";
-import BakersTable from "../components/BakersTable";
+import BakersTable from "../components/tables/BakersTable";
 import CenterBox from "../components/CenterBox";
-import JudgesTable from "../components/JudgesTable";
-import ParticipantTable from "../components/ParticipantTable";
+import JudgesTable from "../components/tables/JudgesTable";
+import ParticipantTable from "../components/tables/ParticipantTable";
 import TitleInputBox from "../components/TitleInputBox";
 import DefaultLayout from "../containers/DefaultLayout";
 import currentDate from "../utils/currentDate";
@@ -15,6 +15,34 @@ const ConfigurePage = () => {
   const [participantData, setParticipantData] = useState();
   const [bakersData, setBakersData] = useState();
   const [judgesData, setJudgesData] = useState();
+
+  useEffect(
+    () =>
+      get(
+        TYPE.JUDGES,
+        ({ judges }) => {
+          setJudgesData(judges);
+        },
+        (errorData) => {
+          console.log(errorData); //TODO: Handle Error
+        }
+      ),
+    [setJudgesData]
+  );
+
+  useEffect(
+    () =>
+      get(
+        TYPE.BAKERS,
+        ({ bakers }) => {
+          setBakersData(bakers);
+        },
+        (errorData) => {
+          console.log(errorData); //TODO: Handle Error
+        }
+      ),
+    [setBakersData]
+  );
 
   useEffect(() => {
     get(
@@ -81,10 +109,18 @@ const ConfigurePage = () => {
             judgesData={judgesData}
             bakersData={bakersData}
           />
+          <CenterBox disableVerticalCenter padding="50px">
+            <BakersTable
+              bakersData={bakersData}
+              setBakersData={setBakersData}
+            />
+            <div style={{ width: "50px" }} />
+            <JudgesTable
+              judgesData={judgesData}
+              setJudgesData={setJudgesData}
+            />
+          </CenterBox>
           <CenterBox />
-          <BakersTable bakersData={bakersData} setBakersData={setBakersData} />
-          <CenterBox />
-          <JudgesTable judgesData={judgesData} setJudgesData={setJudgesData} />
         </>
       )}
     </DefaultLayout>

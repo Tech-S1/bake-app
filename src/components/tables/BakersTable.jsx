@@ -1,12 +1,18 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Table from "./Table";
-import add, { TYPE as ADD_TYPE } from "../apis/add";
-import get, { TYPE as GET_TYPE } from "../apis/get";
-import update, { TYPE as UPDATE_TYPE } from "../apis/update";
-import deleteItem, { TYPE as DELETE_TYPE } from "../apis/delete";
-import deleteBaker from "../apis/deleteBaker";
+import add, { TYPE as ADD_TYPE } from "../../apis/add";
+import update, { TYPE as UPDATE_TYPE } from "../../apis/update";
+import deleteBaker from "../../apis/deleteBaker";
+import { singleRowOptions } from "./options";
 
-const bakersColumns = [
+const bakerNameValidator = (rowData) =>
+  !rowData.bakerName ||
+  rowData.bakerName.length > 28 ||
+  rowData.bakerName.length < 3
+    ? "Must be between 3 and 28"
+    : true;
+
+const columns = [
   {
     title: "Baker Id",
     field: "bakerId",
@@ -17,31 +23,17 @@ const bakersColumns = [
   {
     title: "Name",
     field: "bakerName",
-    validate: (rowData) =>
-      !rowData.bakerName ||
-      rowData.bakerName.length > 28 ||
-      rowData.bakerName.length < 3
-        ? "Must be between 3 and 28"
-        : true,
+    validate: bakerNameValidator,
   },
 ];
 
-const BakersTable = ({ bakersData, setBakersData }) => {
-  useEffect(
-    () =>
-      get(
-        GET_TYPE.BAKERS,
-        ({ bakers }) => {
-          setBakersData(bakers);
-        },
-        (errorData) => {
-          console.log(errorData); //TODO: Handle Error
-        }
-      ),
-    [setBakersData]
-  );
+const dataMapper = (baker) => ({
+  bakerId: baker.id,
+  bakerName: baker.name,
+});
 
-  const tableEditBakersData = {
+const BakersTable = ({ bakersData, setBakersData }) => {
+  const editable = {
     onRowAdd: (newData) =>
       new Promise((resolve, reject) =>
         setTimeout(
@@ -119,16 +111,11 @@ const BakersTable = ({ bakersData, setBakersData }) => {
       {bakersData && (
         <Table
           title="Bakers"
-          columns={bakersColumns}
-          data={bakersData.map((baker) => ({
-            bakerId: baker.id,
-            bakerName: baker.name,
-          }))}
-          editable={tableEditBakersData}
-          options={{
-            actionsColumnIndex: -1,
-            detailPanelType: "single",
-          }}
+          columns={columns}
+          data={bakersData.map(dataMapper)}
+          editable={editable}
+          options={singleRowOptions}
+          padding="0px"
         />
       )}
     </>

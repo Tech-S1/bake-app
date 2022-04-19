@@ -1,10 +1,16 @@
 import React from "react";
-import create, { TYPE as CREATE_TYPE } from "../apis/create";
-import deleteParticipant from "../apis/deleteParticipant";
-import update, { TYPE as UPDATE_TYPE } from "../apis/update";
+import create, { TYPE as CREATE_TYPE } from "../../apis/create";
+import deleteParticipant from "../../apis/deleteParticipant";
+import update, { TYPE as UPDATE_TYPE } from "../../apis/update";
+import { singleRowOptions } from "./options";
 import Table from "./Table";
 
-const participantColumns = [
+const descriptionValidator = (rowData) =>
+  !rowData.name || rowData.name.length > 28 || rowData.name.length < 3
+    ? "Must be between 3 and 28"
+    : true;
+
+const columns = [
   {
     title: "Entrant Id",
     field: "entrantId",
@@ -18,19 +24,29 @@ const participantColumns = [
   {
     title: "Description",
     field: "description",
-    validate: (rowData) =>
-      !rowData.name || rowData.name.length > 28 || rowData.name.length < 3
-        ? "Must be between 3 and 28"
-        : true,
+    validate: descriptionValidator,
   },
 ];
+
+const columnsMapper = ({ column, bakersData }) => {
+  if (column.field === "name") {
+    const obj = {};
+    bakersData
+      .map((data) => data.name)
+      .forEach((name) => {
+        obj[name] = name;
+      });
+    return { ...column, lookup: obj };
+  }
+  return column;
+};
 
 const ParticipantTable = ({
   participantData,
   setParticipantData,
   bakersData,
 }) => {
-  const tableEditParticipantData = {
+  const editable = {
     onRowAdd: (newData) =>
       new Promise((resolve, reject) =>
         setTimeout(() => {
@@ -65,7 +81,6 @@ const ParticipantTable = ({
           );
         }, 1000)
       ),
-
     onRowUpdate: (newData, oldData) =>
       new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -91,7 +106,6 @@ const ParticipantTable = ({
           );
         }, 1000);
       }),
-
     onRowDelete: (oldData) =>
       new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -117,24 +131,12 @@ const ParticipantTable = ({
       {bakersData && participantData && (
         <Table
           title="Participants"
-          columns={participantColumns.map((column) => {
-            if (column.field === "name") {
-              const obj = {};
-              bakersData
-                .map((data) => data.name)
-                .forEach((element) => {
-                  obj[element] = element;
-                });
-              return { ...column, lookup: obj };
-            }
-            return column;
-          })}
+          columns={columns.map((column) =>
+            columnsMapper({ column, bakersData })
+          )}
           data={participantData}
-          editable={tableEditParticipantData}
-          options={{
-            actionsColumnIndex: -1,
-            detailPanelType: "single",
-          }}
+          editable={editable}
+          options={singleRowOptions}
         />
       )}
     </>

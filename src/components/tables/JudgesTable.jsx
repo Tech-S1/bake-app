@@ -1,10 +1,17 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Table from "./Table";
-import add, { TYPE } from "../apis/add";
-import get from "../apis/get";
-import update, { TYPE as UPDATE_TYPE } from "../apis/update";
+import add, { TYPE } from "../../apis/add";
+import update, { TYPE as UPDATE_TYPE } from "../../apis/update";
+import { singleRowOptions } from "./options";
 
-const judgesColumns = [
+const judgeNameValidator = (rowData) =>
+  !rowData.judgeName ||
+  rowData.judgeName.length > 28 ||
+  rowData.judgeName.length < 3
+    ? "Must be between 3 and 28"
+    : true;
+
+const columns = [
   {
     title: "Judge Id",
     field: "judgeId",
@@ -15,31 +22,17 @@ const judgesColumns = [
   {
     title: "Name",
     field: "judgeName",
-    validate: (rowData) =>
-      !rowData.judgeName ||
-      rowData.judgeName.length > 28 ||
-      rowData.judgeName.length < 3
-        ? "Must be between 3 and 28"
-        : true,
+    validate: judgeNameValidator,
   },
 ];
 
-const JudgesTable = ({ judgesData, setJudgesData }) => {
-  useEffect(
-    () =>
-      get(
-        TYPE.JUDGES,
-        ({ judges }) => {
-          setJudgesData(judges);
-        },
-        (errorData) => {
-          console.log(errorData); //TODO: Handle Error
-        }
-      ),
-    [setJudgesData]
-  );
+const dataMapper = (judge) => ({
+  judgeId: judge.id,
+  judgeName: judge.name,
+});
 
-  const tableEditJudgesData = {
+const JudgesTable = ({ judgesData, setJudgesData }) => {
+  const editable = {
     onRowAdd: (newData) =>
       new Promise((resolve, reject) =>
         setTimeout(
@@ -99,16 +92,11 @@ const JudgesTable = ({ judgesData, setJudgesData }) => {
       {judgesData && (
         <Table
           title="Judges"
-          columns={judgesColumns}
-          data={judgesData.map((judge) => ({
-            judgeId: judge.id,
-            judgeName: judge.name,
-          }))}
-          editable={tableEditJudgesData}
-          options={{
-            actionsColumnIndex: -1,
-            detailPanelType: "single",
-          }}
+          columns={columns}
+          data={judgesData.map(dataMapper)}
+          editable={editable}
+          options={singleRowOptions}
+          padding="0px"
         />
       )}
     </>
