@@ -7,6 +7,7 @@ import currentDate from "../utils/currentDate";
 import create, { TYPE as CREATE_TYPE } from "../apis/create";
 import update, { TYPE as UPDATE_TYPE } from "../apis/update";
 import deleteItem, { TYPE as DELETE_TYPE } from "../apis/delete";
+import AuthLayout from "../containers/AuthLayout";
 
 const scoreColumns = [
   {
@@ -222,20 +223,22 @@ const ScoresPage = () => {
 
   return (
     <DefaultLayout>
-      <CenterBox />
-      {judgesData && participantData && (
-        <Table
-          title="Scores"
-          columns={scoreColumns.map(mapScoreColumns)}
-          data={scoresData.map(mapScoreData)}
-          editable={editScoresData}
-          options={{
-            actionsColumnIndex: -1,
-            detailPanelType: "single",
-            paging: false,
-          }}
-        />
-      )}
+      <AuthLayout>
+        <CenterBox />
+        {judgesData && participantData && (
+          <Table
+            title="Scores"
+            columns={scoreColumns.map(mapScoreColumns)}
+            data={scoresData.map(mapScoreData)}
+            editable={editScoresData}
+            options={{
+              actionsColumnIndex: -1,
+              detailPanelType: "single",
+              paging: false,
+            }}
+          />
+        )}
+      </AuthLayout>
     </DefaultLayout>
   );
 };

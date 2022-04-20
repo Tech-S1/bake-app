@@ -8,6 +8,7 @@ import ParticipantTable from "../components/tables/ParticipantTable";
 import TitleInputBox from "../components/TitleInputBox";
 import DefaultLayout from "../containers/DefaultLayout";
 import currentDate from "../utils/currentDate";
+import AuthLayout from "../containers/AuthLayout";
 
 const ConfigurePage = () => {
   const [bakeOffTitle, setBakeOffTitle] = useState();
@@ -94,35 +95,37 @@ const ConfigurePage = () => {
 
   return (
     <DefaultLayout>
-      <CenterBox height={100}>
-        <TitleInputBox
-          value={bakeOffTitle}
-          handleChange={handleSetNewTitle}
-          handleSave={saveTitle}
-        />
-      </CenterBox>
-      {!!bakeOffTitleSaved && (
-        <>
-          <ParticipantTable
-            participantData={participantData}
-            setParticipantData={setParticipantData}
-            judgesData={judgesData}
-            bakersData={bakersData}
+      <AuthLayout>
+        <CenterBox height={100}>
+          <TitleInputBox
+            value={bakeOffTitle}
+            handleChange={handleSetNewTitle}
+            handleSave={saveTitle}
           />
-          <CenterBox disableVerticalCenter padding="50px">
-            <BakersTable
-              bakersData={bakersData}
-              setBakersData={setBakersData}
-            />
-            <div style={{ width: "50px" }} />
-            <JudgesTable
+        </CenterBox>
+        {!!bakeOffTitleSaved && (
+          <>
+            <ParticipantTable
+              participantData={participantData}
+              setParticipantData={setParticipantData}
               judgesData={judgesData}
-              setJudgesData={setJudgesData}
+              bakersData={bakersData}
             />
-          </CenterBox>
-          <CenterBox />
-        </>
-      )}
+            <CenterBox disableVerticalCenter padding="50px">
+              <BakersTable
+                bakersData={bakersData}
+                setBakersData={setBakersData}
+              />
+              <div style={{ width: "50px" }} />
+              <JudgesTable
+                judgesData={judgesData}
+                setJudgesData={setJudgesData}
+              />
+            </CenterBox>
+            <CenterBox />
+          </>
+        )}
+      </AuthLayout>
     </DefaultLayout>
   );
 };

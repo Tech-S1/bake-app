@@ -1,4 +1,5 @@
 import { participantEndpoint, baseurl } from "../constants";
+import { getBasicHeader } from "./auth";
 
 const deleteParticipant = (entrantId, callbackSuccess, callbackError) =>
   fetch(
@@ -6,7 +7,7 @@ const deleteParticipant = (entrantId, callbackSuccess, callbackError) =>
       new URLSearchParams({
         entrantId,
       }),
-    { method: "DELETE" }
+    { method: "DELETE", headers: { Authorization: getBasicHeader() } }
   ).then(
     (result) => {
       callbackSuccess(result);

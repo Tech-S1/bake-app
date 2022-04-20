@@ -1,4 +1,5 @@
 import { bakeoffEndpoint, baseurl } from "../constants";
+import { getBasicHeader } from "./auth";
 
 const ACTION = {
   CREATE: "POST",
@@ -11,7 +12,7 @@ const updateBakeOff = (action, name, callbackSuccess, callbackError) =>
       new URLSearchParams({
         name,
       }),
-    { method: action }
+    { method: action, headers: { Authorization: getBasicHeader() } }
   ).then(
     (result) => {
       callbackSuccess(result);

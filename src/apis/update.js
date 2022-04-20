@@ -5,6 +5,7 @@ import {
   resultEndpoint,
   participantEndpoint,
 } from "../constants";
+import { getBasicHeader } from "./auth";
 
 const TYPE = {
   RESULTS: resultEndpoint,
@@ -18,6 +19,7 @@ const update = (type, data, callbackSuccess, callbackError) =>
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: getBasicHeader(),
     },
     body: JSON.stringify(data),
   }).then(

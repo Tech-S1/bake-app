@@ -1,4 +1,5 @@
 import { bakerEndpoint, baseurl, judgeEndpoint } from "../constants";
+import { getBasicHeader } from "./auth";
 
 const TYPE = {
   JUDGES: judgeEndpoint,
@@ -11,7 +12,7 @@ const add = (type, name, callbackSuccess, callbackError) =>
       new URLSearchParams({
         name,
       }),
-    { method: "POST" }
+    { method: "POST", headers: { Authorization: getBasicHeader() } }
   ).then(
     (result) => {
       callbackSuccess(result);

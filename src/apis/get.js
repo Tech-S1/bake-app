@@ -6,6 +6,7 @@ import {
   latestEndpoint,
   totalsEndpoint,
 } from "../constants";
+import { getBasicHeader } from "./auth";
 
 const TYPE = {
   JUDGES: judgeEndpoint,
@@ -16,7 +17,7 @@ const TYPE = {
 };
 
 const get = (type, callbackSuccess, callbackError) =>
-  fetch(`${baseurl}${type}`)
+  fetch(`${baseurl}${type}`, { headers: { Authorization: getBasicHeader() } })
     .then((res) => res.json())
     .then(
       (result) => {

@@ -1,4 +1,5 @@
 import { bakerEndpoint, baseurl } from "../constants";
+import { getBasicHeader } from "./auth";
 
 const deleteBaker = (name, callbackSuccess, callbackError) =>
   fetch(
@@ -6,7 +7,7 @@ const deleteBaker = (name, callbackSuccess, callbackError) =>
       new URLSearchParams({
         name,
       }),
-    { method: "DELETE" }
+    { method: "DELETE", headers: { Authorization: getBasicHeader() } }
   ).then(
     (result) => {
       callbackSuccess(result);
