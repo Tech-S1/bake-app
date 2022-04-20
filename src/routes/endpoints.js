@@ -3,6 +3,7 @@ import HomePage from "../pages/HomePage";
 import ScoresPage from "../pages/ScoresPage";
 import RunningTotalPage from "../pages/RunningTotalPage";
 import ConfigurePage from "../pages/ConfigurePage";
+import AuthWrapper from "../containers/AuthWrapper";
 
 const endpoints = [
   {
@@ -15,13 +16,21 @@ const endpoints = [
     navbar: true,
     name: "Scores",
     path: "/scores",
-    element: <ScoresPage />,
+    element: (
+      <AuthWrapper>
+        <ScoresPage />
+      </AuthWrapper>
+    ),
   },
   {
     navbar: true,
     name: "Configure",
     path: "/configure",
-    element: <ConfigurePage />,
+    element: (
+      <AuthWrapper>
+        <ConfigurePage />
+      </AuthWrapper>
+    ),
   },
   {
     navbar: true,

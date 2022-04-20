@@ -8,7 +8,6 @@ import ParticipantTable from "../components/tables/ParticipantTable";
 import TitleInputBox from "../components/TitleInputBox";
 import DefaultLayout from "../containers/DefaultLayout";
 import currentDate from "../utils/currentDate";
-import AuthLayout from "../containers/AuthLayout";
 
 const ConfigurePage = () => {
   const [bakeOffTitle, setBakeOffTitle] = useState();
@@ -95,37 +94,35 @@ const ConfigurePage = () => {
 
   return (
     <DefaultLayout>
-      <AuthLayout>
-        <CenterBox height={100}>
-          <TitleInputBox
-            value={bakeOffTitle}
-            handleChange={handleSetNewTitle}
-            handleSave={saveTitle}
+      <CenterBox height={100}>
+        <TitleInputBox
+          value={bakeOffTitle}
+          handleChange={handleSetNewTitle}
+          handleSave={saveTitle}
+        />
+      </CenterBox>
+      {!!bakeOffTitleSaved && (
+        <>
+          <ParticipantTable
+            participantData={participantData}
+            setParticipantData={setParticipantData}
+            judgesData={judgesData}
+            bakersData={bakersData}
           />
-        </CenterBox>
-        {!!bakeOffTitleSaved && (
-          <>
-            <ParticipantTable
-              participantData={participantData}
-              setParticipantData={setParticipantData}
-              judgesData={judgesData}
+          <CenterBox disableVerticalCenter padding="50px">
+            <BakersTable
               bakersData={bakersData}
+              setBakersData={setBakersData}
             />
-            <CenterBox disableVerticalCenter padding="50px">
-              <BakersTable
-                bakersData={bakersData}
-                setBakersData={setBakersData}
-              />
-              <div style={{ width: "50px" }} />
-              <JudgesTable
-                judgesData={judgesData}
-                setJudgesData={setJudgesData}
-              />
-            </CenterBox>
-            <CenterBox />
-          </>
-        )}
-      </AuthLayout>
+            <div style={{ width: "50px" }} />
+            <JudgesTable
+              judgesData={judgesData}
+              setJudgesData={setJudgesData}
+            />
+          </CenterBox>
+          <CenterBox />
+        </>
+      )}
     </DefaultLayout>
   );
 };

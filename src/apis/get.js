@@ -17,7 +17,12 @@ const TYPE = {
 };
 
 const get = (type, callbackSuccess, callbackError) =>
-  fetch(`${baseurl}${type}`, { headers: { Authorization: getBasicHeader() } })
+  fetch(
+    `${baseurl}${type}`,
+    type === TYPE.JUDGES || type === TYPE.BAKERS
+      ? { headers: { Authorization: getBasicHeader() } }
+      : {}
+  )
     .then((res) => res.json())
     .then(
       (result) => {
