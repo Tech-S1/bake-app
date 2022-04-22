@@ -10,6 +10,7 @@ const Table = ({
   options,
   width,
   padding,
+  actions,
 }) => (
   <div style={{ maxWidth: width || "100%", padding: padding || "0 50px" }}>
     <MaterialTable
@@ -19,6 +20,7 @@ const Table = ({
       editable={editable}
       detailPanel={detailPanel}
       options={options}
+      actions={actions}
     />
   </div>
 );

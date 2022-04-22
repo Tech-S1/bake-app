@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import create, { TYPE as CREATE_TYPE } from "../../apis/create";
 import deleteParticipant from "../../apis/deleteParticipant";
 import update, { TYPE as UPDATE_TYPE } from "../../apis/update";
+import ImageModal from "../ImageModal";
 import { singleRowOptions } from "./options";
 import Table from "./Table";
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 
 const descriptionValidator = (rowData) =>
   !rowData.description ||
@@ -128,8 +130,16 @@ const ParticipantTable = ({
       }),
   };
 
+  const [entrantId, setEntrantId] = useState();
+
   return (
     <>
+      <ImageModal
+        entrantId={entrantId}
+        clearEntrantId={() => setEntrantId()}
+        upload={true}
+      />
+
       {bakersData && participantData && (
         <Table
           title="Participants"
@@ -139,6 +149,12 @@ const ParticipantTable = ({
           data={participantData}
           editable={editable}
           options={singleRowOptions}
+          actions={[
+            {
+              icon: () => <PhotoCameraIcon />,
+              onClick: (event, rowData) => setEntrantId(rowData.bakerId),
+            },
+          ]}
         />
       )}
     </>
