@@ -152,7 +152,7 @@ const ParticipantTable = ({
           actions={[
             {
               icon: () => <PhotoCameraIcon />,
-              onClick: (event, rowData) => setEntrantId(rowData.bakerId),
+              onClick: (event, rowData) => setEntrantId(rowData.entrantId),
             },
           ]}
         />
