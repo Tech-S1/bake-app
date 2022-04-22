@@ -9,6 +9,8 @@ import CenterBox from "../components/CenterBox";
 import mapParticipantToTable from "../utils/mapParticipantToTable";
 import get, { TYPE } from "../apis/get";
 import SimpleTable from "../components/tables/SimpleTable";
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+import ImageModal from "../components/ImageModal";
 
 const archiveColumns = [
   { title: "Entrant Id", field: "bakerId", type: "numeric" },
@@ -88,8 +90,15 @@ const ArchivePage = () => {
     );
   };
 
+  const [entrantId, setEntrantId] = useState();
+
   return (
     <DefaultLayout>
+      <ImageModal
+        entrantId={entrantId}
+        clearEntrantId={() => setEntrantId()}
+        selectedDate={selectedDate}
+      />
       <CenterBox height={100}>
         <CenterBox width="50%" height={100}>
           <FormControl fullWidth>
@@ -119,6 +128,12 @@ const ArchivePage = () => {
             detailPanelType: "single",
             paging: false,
           }}
+          actions={[
+            {
+              icon: () => <PhotoCameraIcon />,
+              onClick: (event, rowData) => setEntrantId(rowData.bakerId),
+            },
+          ]}
         />
       )}
     </DefaultLayout>

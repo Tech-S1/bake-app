@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Table from "./Table";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
@@ -6,6 +6,7 @@ import CenterBox from "../../components/CenterBox";
 import mapParticipantToTable from "../../utils/mapParticipantToTable";
 import SimpleTable from "./SimpleTable";
 import { noPaging } from "./options";
+import ImageModal from "../ImageModal";
 
 const columnsBakerId = { title: "Entrant Id", field: "bakerId" };
 const columnsBakerName = { title: "Baker Name", field: "name" };
@@ -76,34 +77,31 @@ const detailsPanel = ({ participants }) => [
     icon: () => <PersonSearchIcon />,
     render: ({ rowData }) => detailsRow({ rowData, participants }),
   },
-  {
-    icon: () => <PhotoCameraIcon />,
-    render: ({ rowData }) =>
-      rowData.images ? (
-        <CenterBox height={325}>
-          <img
-            height="300"
-            src="https://upload.wikimedia.org/wikipedia/commons/1/11/Test-Logo.svg"
-          />
-        </CenterBox>
-      ) : (
-        <CenterBox height={50}>No Images</CenterBox>
-      ),
-  },
 ];
 
-const ScoresTable = ({ participants, showName }) => (
-  <>
-    {participants && (
-      <Table
-        title="Scores"
-        columns={[showName ? columnsBakerName : columnsBakerId, ...columns]}
-        data={participants.map(mapParticipantToTable)}
-        detailPanel={detailsPanel({ participants })}
-        options={noPaging}
-      />
-    )}
-  </>
-);
+const ScoresTable = ({ participants, showName }) => {
+  const [entrantId, setEntrantId] = useState();
+  return (
+    <>
+      <ImageModal entrantId={entrantId} clearEntrantId={() => setEntrantId()} />
+
+      {participants && (
+        <Table
+          title="Scores"
+          columns={[showName ? columnsBakerName : columnsBakerId, ...columns]}
+          data={participants.map(mapParticipantToTable)}
+          detailPanel={detailsPanel({ participants })}
+          options={noPaging}
+          actions={[
+            {
+              icon: () => <PhotoCameraIcon />,
+              onClick: (event, rowData) => setEntrantId(rowData.bakerId),
+            },
+          ]}
+        />
+      )}
+    </>
+  );
+};
 
 export default ScoresTable;

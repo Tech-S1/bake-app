@@ -7,7 +7,6 @@ import currentDate from "../utils/currentDate";
 import create, { TYPE as CREATE_TYPE } from "../apis/create";
 import update, { TYPE as UPDATE_TYPE } from "../apis/update";
 import deleteItem, { TYPE as DELETE_TYPE } from "../apis/delete";
-import AuthLayout from "../containers/AuthWrapper";
 
 const scoreColumns = [
   {
@@ -182,8 +181,8 @@ const ScoresPage = () => {
     rowData.judgeName &&
     scoresData.filter(
       (scoreData) =>
-        scoreData.entrantId == rowData.entrantId &&
-        scoreData.judgeName == rowData.judgeName
+        scoreData.entrantId === rowData.entrantId &&
+        scoreData.judgeName === rowData.judgeName
     ).length === 0
       ? true
       : "Unique Combination Needed";
