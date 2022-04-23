@@ -4,10 +4,11 @@ import ScoresPage from "../pages/ScoresPage";
 import RunningTotalPage from "../pages/RunningTotalPage";
 import ConfigurePage from "../pages/ConfigurePage";
 import AuthWrapper from "../containers/AuthWrapper";
+import PhotoPage from "../pages/PhotoPage";
 
 const endpoints = [
   {
-    navbar: false,
+    navbar: true,
     name: "Home",
     path: "/",
     element: <HomePage />,
@@ -43,6 +44,16 @@ const endpoints = [
     name: "Totals",
     path: "/totals",
     element: <RunningTotalPage />,
+  },
+  {
+    navbar: false,
+    name: "Photos",
+    path: "/photos",
+    element: (
+      <AuthWrapper>
+        <PhotoPage />
+      </AuthWrapper>
+    ),
   },
 ];
 

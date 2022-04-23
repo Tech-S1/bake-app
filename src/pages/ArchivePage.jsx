@@ -136,6 +136,7 @@ const ArchivePage = () => {
           ]}
         />
       )}
+      <CenterBox height={100} />
     </DefaultLayout>
   );
 };

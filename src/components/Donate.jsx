@@ -1,6 +1,6 @@
 import React from "react";
 import { Box } from "@mui/system";
-import { Paper, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { QRCode } from "react-qrcode-logo";
 
 const Donate = ({ url }) => (
