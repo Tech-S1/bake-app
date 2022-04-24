@@ -151,7 +151,7 @@ const PhotoPage = () => {
           </CenterBox>
         </PhotosLayout>
       ) : (
-        <DefaultLayout>
+        <PhotosLayout>
           <Box
             sx={{
               marginTop: 8,
@@ -164,7 +164,7 @@ const PhotoPage = () => {
           >
             <CenterBox>No Active Bakeoff</CenterBox>
           </Box>
-        </DefaultLayout>
+        </PhotosLayout>
       )}
     </>
   );
