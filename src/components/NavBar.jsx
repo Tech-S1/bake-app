@@ -6,34 +6,39 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import endpoints from "../routes/endpoints";
 import { useNavigate } from "react-router-dom";
+import { useMediaQuery, useTheme } from "@mui/material";
+import DrawerComponent from "./DrawerComponent";
 
-const NavBar = ({ nonDefaultEndpoints }) => {
+const NavBar = () => {
+  const theme = useTheme();
   let navigate = useNavigate();
-  const [endpointsInUse, setEndpoints] = useState([]);
-
-  useEffect(() => {
-    !!nonDefaultEndpoints
-      ? setEndpoints(nonDefaultEndpoints)
-      : setEndpoints(endpoints);
-  });
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Bake Off
-          </Typography>
-          {endpointsInUse
-            .filter((endpoint) => endpoint.navbar)
-            .map(({ name, path }) => (
-              <Button key={name} color="inherit" onClick={() => navigate(path)}>
-                {name}
-              </Button>
-            ))}
-        </Toolbar>
-      </AppBar>
-    </Box>
+    <AppBar position="static">
+      <Toolbar>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          Bake Off
+        </Typography>
+        {isMobile ? (
+          <DrawerComponent />
+        ) : (
+          <>
+            {endpoints
+              .filter((endpoint) => endpoint.navbar)
+              .map(({ name, path }) => (
+                <Button
+                  key={name}
+                  color="inherit"
+                  onClick={() => navigate(path)}
+                >
+                  {name}
+                </Button>
+              ))}
+          </>
+        )}
+      </Toolbar>
+    </AppBar>
   );
 };
 
