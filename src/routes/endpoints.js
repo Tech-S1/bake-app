@@ -46,7 +46,7 @@ const endpoints = [
     element: <RunningTotalPage />,
   },
   {
-    navbar: false,
+    navbar: true,
     name: "Photos",
     path: "/photos",
     element: (

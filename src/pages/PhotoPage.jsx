@@ -13,7 +13,6 @@ import get, { TYPE } from "../apis/get";
 import uploadPhoto from "../apis/uploadPhoto";
 import CenterBox from "../components/CenterBox";
 import DefaultLayout from "../containers/DefaultLayout";
-import PhotosLayout from "../containers/PhotosLayout";
 import currentDate from "../utils/currentDate";
 
 const Input = styled("input")({
@@ -83,7 +82,7 @@ const PhotoPage = () => {
   return (
     <>
       {bakeOffTitle ? (
-        <PhotosLayout>
+        <DefaultLayout>
           <CenterBox height="100%">
             <Box
               sx={{
@@ -149,7 +148,7 @@ const PhotoPage = () => {
               )}
             </Box>
           </CenterBox>
-        </PhotosLayout>
+        </DefaultLayout>
       ) : (
         <DefaultLayout>
           <Box
