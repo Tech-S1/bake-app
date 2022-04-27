@@ -11,7 +11,7 @@ import currentDate from "../utils/currentDate";
 
 const ConfigurePage = () => {
   const [bakeOffTitle, setBakeOffTitle] = useState();
-  const [bakeOffTitleSaved, setBakeOffTitleSaved] = useState();
+  const [bakeOffTitleSaved, setBakeOffTitleSaved] = useState(false);
   const [participantData, setParticipantData] = useState();
   const [bakersData, setBakersData] = useState();
   const [judgesData, setJudgesData] = useState();
@@ -48,13 +48,16 @@ const ConfigurePage = () => {
     get(
       TYPE.LATEST_BAKE_OFF,
       ({ bakeoffs }) => {
+        if (bakeoffs.length === 0) {
+          return;
+        }
         if (bakeoffs[0].date !== currentDate()) {
           return; // No Bake Offs - Dont Set Title
         }
         const title = bakeoffs[0].title;
-        setBakeOffTitle(title);
-        setBakeOffTitleSaved(title);
         setParticipantData(bakeoffs[0].participants);
+        setBakeOffTitle(title);
+        setBakeOffTitleSaved(true);
       },
       (errorData) => {
         console.log(errorData); //TODO: Handle Error
@@ -71,8 +74,7 @@ const ConfigurePage = () => {
       updateBakeOff(
         ACTION.CREATE,
         bakeOffTitle,
-        bakeOffTitle,
-        () => setBakeOffTitleSaved(bakeOffTitle),
+        () => setBakeOffTitleSaved(true),
         (errorData) => {
           console.log(errorData); //TODO: Handle Error
         }
@@ -81,13 +83,12 @@ const ConfigurePage = () => {
       updateBakeOff(
         ACTION.UPDATE,
         bakeOffTitle,
-        () => setBakeOffTitleSaved(bakeOffTitle),
+        () => setBakeOffTitleSaved(true),
         (errorData) => {
           console.log(errorData); //TODO: Handle Error
         }
       );
     }
-    window.location.reload(false);
   };
 
   const handleSetNewTitle = ({ target }) => setBakeOffTitle(target.value);
