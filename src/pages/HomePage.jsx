@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import DefaultLayout from "../containers/DefaultLayout";
 import Typography from "@mui/material/Typography";
 import { Stack } from "@mui/material";
-import { qrEnabled } from "../constants";
+import { qrEnabled, qrUrl } from "../constants";
 import CenterBox from "../components/CenterBox";
 import Donate from "../components/Donate";
 import ToggleSwitch from "../components/ToggleSwitch";
@@ -22,11 +22,7 @@ const HomePage = () => {
   }, []);
 
   const QRCode = () => (
-    <CenterBox>
-      {qrEnabled === "true" && (
-        <Donate url="https://www.paypal.com/pools/c/8ILqSxkv4E" />
-      )}
-    </CenterBox>
+    <CenterBox>{qrEnabled === "true" && <Donate url={qrUrl} />}</CenterBox>
   );
 
   const Title = () => (
