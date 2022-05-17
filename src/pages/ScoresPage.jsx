@@ -223,7 +223,7 @@ const ScoresPage = () => {
   return (
     <DefaultLayout>
       <CenterBox />
-      {judgesData && participantData && (
+      {judgesData && participantData ? (
         <Table
           title="Scores"
           columns={scoreColumns.map(mapScoreColumns)}
@@ -235,6 +235,8 @@ const ScoresPage = () => {
             paging: false,
           }}
         />
+      ) : (
+        <CenterBox>No Active Bakeoff</CenterBox>
       )}
     </DefaultLayout>
   );
